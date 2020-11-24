@@ -6,6 +6,10 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[dependencies]
+maplit = "1.0.2"
+serde_json = "1.0.59"
+
 [dependencies.cursive]
 version = "0.15"
 default-features = false

@@ -1,3 +1,4 @@
+mod challenge_config;
 mod group_config;
 pub mod group_manager;
 

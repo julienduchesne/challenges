@@ -1,12 +1,4 @@
-use super::group_config::GroupConfig;
+pub mod config;
 
-pub struct ProjectEuler {}
-
-impl GroupConfig for ProjectEuler {
-    fn name(&self) -> &'static str {
-        return "Project Euler";
-    }
-    fn url(&self) -> &'static str {
-        return "https://projecteuler.net/";
-    }
-}
+// Challenges
+mod challenge0001;
