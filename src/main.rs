@@ -1,48 +1,70 @@
-use cursive::views::{Dialog, SelectView, TextView};
+use cursive::traits::Resizable;
+use cursive::view::SizeConstraint;
+use cursive::views::{Button, Dialog, LinearLayout, ScrollView, SelectView, TextArea, TextView};
 use cursive::{align::HAlign, Cursive};
+use cursive::{traits::Boxable, views::PaddedView};
 
 mod groups;
 use groups::group_manager::GroupManager;
 
 struct Controller {
-    groupManager: GroupManager,
+    group_manager: GroupManager,
 }
 
 impl Controller {
     fn new() -> Self {
         return Controller {
-            groupManager: GroupManager::new(),
+            group_manager: GroupManager::new(),
         };
+    }
+
+    fn run(&self) {
+        let mut siv = cursive::default();
+        let mut group_select = SelectView::<String>::new().h_align(HAlign::Center);
+        for group in self.group_manager.get_group_names() {
+            for i in 0..100 {
+                group_select.add_item_str(i.to_string());
+            }
+        }
+        let mut group_select2 = SelectView::<String>::new().h_align(HAlign::Center);
+        for group in self.group_manager.get_group_names() {
+            group_select2.add_item_str(group);
+        }
+        let linear_layout = LinearLayout::horizontal()
+            .child(PaddedView::lrtb(
+                2,
+                2,
+                0,
+                0, // Left, Right, Top, Bottom
+                ScrollView::new(group_select).resized(SizeConstraint::Free, SizeConstraint::Full),
+            ))
+            .child(PaddedView::lrtb(
+                2,
+                2,
+                0,
+                0, // Left, Right, Top, Bottom
+                ScrollView::new(group_select2).resized(SizeConstraint::Free, SizeConstraint::Full),
+            ))
+            .child(Button::new("Ok", |s| s.quit()));
+        siv.add_fullscreen_layer(linear_layout);
+
+        // let mut challenge_select = SelectView::new().h_align(HAlign::Center);
+        // for challenge in self
+        //     .group_manager
+        //     .get_group_challenge_names("Project Euler")
+        //     .unwrap()
+        // {
+        //     challenge_select.add_item_str(challenge);
+        // }
+        // siv.add_layer(ScrollView::new(challenge_select));
+
+        siv.run();
     }
 }
 
 fn main() {
-    // Creates the cursive root - required for every application.
-    let mut siv = cursive::default();
-
-    let mut group_select = SelectView::<String>::new().h_align(HAlign::Center);
-    for group in groups {
-        group_select.add_item_str(group);
-    }
-
-    group_select.set_on_submit(move |s: &mut Cursive, selected_group: &String| {
-        s.pop_layer();
-        let mut challenge_select = SelectView::new().h_align(HAlign::Center);
-        for challenge in manager.get_group_challenge_names(&*selected_group).unwrap() {
-            challenge_select.add_item_str(challenge);
-        }
-        s.add_layer(Dialog::around(challenge_select).button("Quit", |s| s.quit()));
-
-        challenge_select.set_on_submit(|s: &mut Cursive, selected_challenge: &String| {
-            s.pop_layer();
-            s.add_layer(
-                Dialog::around(TextView::new(selected_challenge)).button("Quit", |s| s.quit()),
-            );
-        });
-    });
-
-    siv.add_layer(Dialog::around(group_select).title("Challenge Group"));
+    let controller = Controller::new();
+    controller.run();
 
     // Starts the event loop.
-    siv.run();
 }
