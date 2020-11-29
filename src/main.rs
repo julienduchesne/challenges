@@ -1,10 +1,7 @@
 use cursive::traits::{Nameable, Resizable, View};
-use cursive::view::{IntoBoxedView, SizeConstraint, ViewWrapper};
-use cursive::views::{
-    Button, Dialog, LinearLayout, NamedView, Panel, ScrollView, SelectView, TextArea, TextView,
-};
+use cursive::view::{IntoBoxedView, SizeConstraint};
+use cursive::views::{LinearLayout, PaddedView, Panel, ScrollView, SelectView, TextView};
 use cursive::{align::HAlign, Cursive};
-use cursive::{traits::Boxable, views::PaddedView};
 
 mod groups;
 use groups::challenge_config::ChallengeConfig;
@@ -19,6 +16,8 @@ fn pad<V>(v: V) -> PaddedView<V> {
 
 struct UserData {
     group_manager: GroupManager,
+    // selected_group: &str,
+    // selected_challenge: &str,
 }
 
 impl UserData {
@@ -59,6 +58,7 @@ fn create_challenge_select(initial_challenges: Vec<String>) -> Box<dyn View> {
     let mut challenge_select = SelectView::<String>::new()
         .h_align(HAlign::Center)
         .on_select(|s: &mut Cursive, item: &String| {
+            let user_data: &mut UserData = s.user_data::<UserData>().unwrap();
             s.call_on_name("content", |view: &mut TextView| view.set_content("test"));
         });
     for challenge in initial_challenges {
@@ -82,6 +82,8 @@ fn create_challenge_display(initial_challenge: &Box<dyn ChallengeConfig>) -> Box
     .as_boxed_view();
 }
 
+// fn update_challenge_display()
+
 fn main() {
     let mut siv = cursive::default();
     let group_manager = GroupManager::new();
@@ -101,8 +103,7 @@ fn main() {
         .child(create_group_select(group_names))
         .child(create_challenge_select(initial_challenges))
         .child(create_challenge_display(first_challenge))
-        .min_width(800)
-        .min_height(600);
+        .full_screen();
     siv.add_fullscreen_layer(linear_layout);
 
     siv.run();
