@@ -1,6 +1,6 @@
-use super::advent_of_code_2020::config::AdventOfCode2020;
 use super::group_config::GroupConfig;
 use super::project_euler::config::ProjectEuler;
+use super::{advent_of_code_2020::config::AdventOfCode2020, challenge_config::ChallengeConfig};
 
 pub struct GroupManager {
     groups: Vec<Box<dyn GroupConfig>>,
@@ -28,6 +28,18 @@ impl GroupManager {
         let group = self.get_group(group_name);
         if group.is_some() {
             return Some(group.unwrap().challenge_names());
+        }
+        return None;
+    }
+
+    pub fn get_challenge(
+        &self,
+        group_name: &str,
+        challenge_name: &str,
+    ) -> Option<&Box<dyn ChallengeConfig>> {
+        let group = self.get_group(group_name);
+        if group.is_some() {
+            return group.unwrap().challenge(challenge_name);
         }
         return None;
     }

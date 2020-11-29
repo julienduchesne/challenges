@@ -1,4 +1,6 @@
 use super::super::{challenge_config::ChallengeConfig, group_config::GroupConfig};
+use super::day01::Day1;
+use super::day02::Day2;
 
 pub struct AdventOfCode2020 {
     challenges: Vec<Box<dyn ChallengeConfig>>,
@@ -9,7 +11,9 @@ impl GroupConfig for AdventOfCode2020 {
     where
         Self: Sized,
     {
-        return AdventOfCode2020 { challenges: vec![] };
+        return AdventOfCode2020 {
+            challenges: vec![Box::new(Day1 {}), Box::new(Day2 {})],
+        };
     }
 
     fn name(&self) -> &str {
