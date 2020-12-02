@@ -1,6 +1,9 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, error::Error};
 
-use super::super::{challenge_config::ChallengeConfig, challenge_config::VariableType};
+use super::super::{
+    challenge_config::ChallengeConfig, challenge_config::ChallengeError,
+    challenge_config::VariableType,
+};
 use maplit::hashmap;
 
 pub struct Challenge1 {}
@@ -23,8 +26,8 @@ impl ChallengeConfig for Challenge1 {
         return hashmap! {"x" => VariableType::Integer};
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> &str {
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
         let max: i64 = serde_json::from_str(variables["x"]).unwrap();
-        return "Answer";
+        return Ok("Answer".to_string());
     }
 }

@@ -1,6 +1,8 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, error::Error};
 
-use super::super::{challenge_config::ChallengeConfig, challenge_config::VariableType};
+use crate::groups::challenge_config::ChallengeError;
+
+use super::super::challenge_config::ChallengeConfig;
 use maplit::hashmap;
 
 pub struct Day2 {}
@@ -22,7 +24,7 @@ impl ChallengeConfig for Day2 {
         return hashmap! {};
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> &str {
-        return "Answer";
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
+        return Ok("Answer".to_string());
     }
 }
