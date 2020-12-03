@@ -1,4 +1,4 @@
-use std::{collections::HashMap, error::Error};
+use std::collections::HashMap;
 
 use super::super::{
     challenge_config::ChallengeConfig, challenge_config::ChallengeError,
@@ -26,8 +26,7 @@ impl ChallengeConfig for Challenge1 {
         return hashmap! {"x" => VariableType::Integer};
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
-        let max: i64 = serde_json::from_str(variables["x"]).unwrap();
+    fn solve(&self, _variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
         return Ok("Answer".to_string());
     }
 }

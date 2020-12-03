@@ -1,15 +1,24 @@
-use std::{collections::HashMap, error::Error, fmt};
+use std::{collections::HashMap, fmt};
 
 #[derive(Debug, Clone)]
-pub struct ChallengeError;
+pub struct ChallengeError {
+    message: String,
+}
+
+impl ChallengeError {
+    pub fn new(message: &str) -> ChallengeError {
+        return ChallengeError {
+            message: message.to_string(),
+        };
+    }
+}
 
 impl fmt::Display for ChallengeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "invalid first item to double")
+        write!(f, "{}", self.message)
     }
 }
 pub enum VariableType {
-    String,
     MultiLineString,
     Integer,
 }

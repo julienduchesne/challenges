@@ -1,8 +1,6 @@
-use std::{collections::HashMap, error::Error};
+use std::collections::HashMap;
 
-use super::super::challenge_config::ChallengeConfig;
-use super::super::challenge_config::ChallengeError;
-use super::super::challenge_config::VariableType;
+use super::super::challenge_config::{ChallengeConfig, ChallengeError, VariableType};
 use maplit::hashmap;
 
 pub struct Day1 {}
@@ -19,7 +17,9 @@ impl Day1 {
                 }
             }
         }
-        return Err(ChallengeError);
+        return Err(ChallengeError::new(
+            "Could not find a solution for part one",
+        ));
     }
 
     fn solve_part_two(&self, numbers: Vec<i64>) -> Result<i64, ChallengeError> {
@@ -35,7 +35,9 @@ impl Day1 {
                 }
             }
         }
-        return Err(ChallengeError);
+        return Err(ChallengeError::new(
+            "Could not find a solution for part two",
+        ));
     }
 }
 
@@ -45,11 +47,11 @@ impl ChallengeConfig for Day1 {
     }
 
     fn title(&self) -> &str {
-        return "Test1";
+        return "Report Repair";
     }
 
     fn description(&self) -> &str {
-        return "Something1";
+        return "";
     }
 
     fn variables(&self) -> HashMap<&str, crate::groups::challenge_config::VariableType> {
@@ -65,13 +67,23 @@ impl ChallengeConfig for Day1 {
             .map(|x| x.parse::<i64>())
             .collect();
         if numbers.is_err() {
-            return Err(ChallengeError);
+            return Err(ChallengeError::new(
+                format!(
+                    "Error parsing the input: {}",
+                    numbers.unwrap_err().to_string()
+                )
+                .as_str(),
+            ));
         }
 
         let part_one = self.solve_part_one(numbers.clone().unwrap());
+        if part_one.is_err() {
+            return Err(part_one.unwrap_err());
+        }
+
         let part_two = self.solve_part_two(numbers.clone().unwrap());
-        if part_one.is_err() || part_two.is_err() {
-            return Err(ChallengeError);
+        if part_two.is_err() {
+            return Err(part_two.unwrap_err());
         }
         return Ok(format!(
             "Part 1: {}\nPart 2: {}",
@@ -120,5 +132,16 @@ mod tests {
     fn solve(input: &str, expected: &str) {
         let day1 = Day1 {};
         assert_eq!(day1.solve(hashmap! {"report" => input}).unwrap(), expected);
+    }
+
+    #[test]
+    fn parsing_error() {
+        let day1 = Day1 {};
+        assert_eq!(
+            day1.solve(hashmap! {"report" => "abc"})
+                .unwrap_err()
+                .to_string(),
+            "Error parsing the input: invalid digit found in string"
+        );
     }
 }

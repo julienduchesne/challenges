@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate lazy_static;
+
 use cursive::traits::{Nameable, Resizable, View};
 use cursive::view::{IntoBoxedView, SizeConstraint};
 use cursive::views::{LinearLayout, PaddedView, Panel, ScrollView, SelectView, TextView};
