@@ -130,9 +130,9 @@ mod tests {
         )
     )]
     fn solve(input: &str, expected: &str) {
-        let day1 = Day2 {};
+        let day = Day2 {};
         assert_eq!(
-            day1.solve(hashmap! {"passwords" => input}).unwrap(),
+            day.solve(hashmap! {"passwords" => input}).unwrap(),
             expected
         );
     }

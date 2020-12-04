@@ -19,8 +19,9 @@ impl fmt::Display for ChallengeError {
     }
 }
 pub enum VariableType {
-    MultiLineString,
     Integer,
+    MultiLineString,
+    String,
 }
 pub trait ChallengeConfig {
     fn id(&self) -> &str;
