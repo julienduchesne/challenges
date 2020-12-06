@@ -10,6 +10,7 @@ edition = "2018"
 rstest = "0.6.4"
 
 [dependencies]
+itertools = "0.9.0"
 lazy_static = "1.4.0"
 maplit = "1.0.2"
 ndarray = "0.14.0"

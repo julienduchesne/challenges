@@ -9,7 +9,7 @@ use ndarray::{Array, Array2, Axis};
 pub struct Day3 {}
 
 impl Day3 {
-    fn solve_path(&self, array: Array2<usize>, path: Vec<isize>) -> Result<usize, ChallengeError> {
+    fn solve_path(&self, array: Array2<usize>, path: Vec<isize>) -> usize {
         let mut trees_hit = 0;
         let mut current_row = 0;
         let mut current_col = 0;
@@ -23,7 +23,7 @@ impl Day3 {
             }
         }
 
-        return Ok(trees_hit);
+        return trees_hit;
     }
 }
 
@@ -66,7 +66,7 @@ impl ChallengeConfig for Day3 {
         let mut total = 1;
         let mut result = "".to_string();
         for (i, path_vec) in path_vecs.iter().enumerate() {
-            let line_result = self.solve_path(array.clone(), path_vec.clone()).unwrap();
+            let line_result = self.solve_path(array.clone(), path_vec.clone());
             total = total * line_result;
             result.push_str(format!("Path {}: {}\n", i, line_result).as_str());
         }

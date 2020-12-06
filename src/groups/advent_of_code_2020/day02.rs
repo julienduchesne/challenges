@@ -37,7 +37,7 @@ impl Line {
 }
 
 impl Day2 {
-    fn solve_part_one(&self, lines: Vec<Line>) -> Result<i32, ChallengeError> {
+    fn solve_part_one(&self, lines: Vec<Line>) -> i32 {
         let mut total = 0;
         for line in lines {
             let char_count = line.password.matches(line.letter).count();
@@ -45,10 +45,10 @@ impl Day2 {
                 total = total + 1;
             }
         }
-        return Ok(total);
+        return total;
     }
 
-    fn solve_part_two(&self, lines: Vec<Line>) -> Result<i32, ChallengeError> {
+    fn solve_part_two(&self, lines: Vec<Line>) -> i32 {
         let mut total = 0;
         for line in lines {
             if (line.password.chars().nth(line.min_chars - 1).unwrap() == line.letter)
@@ -57,7 +57,7 @@ impl Day2 {
                 total = total + 1;
             }
         }
-        return Ok(total);
+        return total;
     }
 }
 
@@ -93,20 +93,8 @@ impl ChallengeConfig for Day2 {
         }
 
         let part_one = self.solve_part_one(lines.clone().unwrap());
-        if part_one.is_err() {
-            return Err(part_one.unwrap_err());
-        }
-
         let part_two = self.solve_part_two(lines.clone().unwrap());
-        if part_two.is_err() {
-            return Err(part_two.unwrap_err());
-        }
-        return Ok(format!(
-            "Part 1: {}\nPart 2: {}",
-            part_one.unwrap(),
-            part_two.unwrap()
-        )
-        .to_string());
+        return Ok(format!("Part 1: {}\nPart 2: {}", part_one, part_two).to_string());
     }
 }
 
