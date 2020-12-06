@@ -51,7 +51,7 @@ impl ChallengeConfig for Day1 {
     }
 
     fn description(&self) -> &str {
-        return "";
+        return "test1";
     }
 
     fn variables(&self) -> HashMap<&str, crate::groups::challenge_config::VariableType> {

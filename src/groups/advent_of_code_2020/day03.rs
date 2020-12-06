@@ -4,7 +4,7 @@ use super::super::challenge_config::ChallengeConfig;
 use super::super::challenge_config::ChallengeError;
 use super::super::challenge_config::VariableType;
 use maplit::hashmap;
-use ndarray::{arr2, Array, Array2, Axis};
+use ndarray::{Array, Array2, Axis};
 
 pub struct Day3 {}
 
