@@ -9,12 +9,8 @@ use maplit::hashmap;
 pub struct Challenge1 {}
 
 impl ChallengeConfig for Challenge1 {
-    fn id(&self) -> &str {
-        return "1";
-    }
-
     fn title(&self) -> &str {
-        return "Multiples of 3 and 5";
+        return "1: Multiples of 3 and 5";
     }
 
     fn description(&self) -> &str {

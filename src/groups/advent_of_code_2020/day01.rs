@@ -42,12 +42,8 @@ impl Day1 {
 }
 
 impl ChallengeConfig for Day1 {
-    fn id(&self) -> &str {
-        return "Day 1";
-    }
-
     fn title(&self) -> &str {
-        return "Report Repair";
+        return "Day 1: Report Repair";
     }
 
     fn description(&self) -> &str {

@@ -28,12 +28,8 @@ impl Day3 {
 }
 
 impl ChallengeConfig for Day3 {
-    fn id(&self) -> &str {
-        return "Day 3";
-    }
-
     fn title(&self) -> &str {
-        return "Toboggan Trajectory";
+        return "Day 3: Toboggan Trajectory";
     }
 
     fn description(&self) -> &str {

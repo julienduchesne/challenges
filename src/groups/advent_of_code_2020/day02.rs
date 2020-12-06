@@ -62,12 +62,8 @@ impl Day2 {
 }
 
 impl ChallengeConfig for Day2 {
-    fn id(&self) -> &str {
-        return "Day 2";
-    }
-
     fn title(&self) -> &str {
-        return "Password Philosophy";
+        return "Day 2: Password Philosophy";
     }
 
     fn description(&self) -> &str {

@@ -24,7 +24,6 @@ pub enum VariableType {
     String,
 }
 pub trait ChallengeConfig {
-    fn id(&self) -> &str;
     fn title(&self) -> &str;
     fn description(&self) -> &str;
     fn variables(&self) -> HashMap<&str, VariableType>;
