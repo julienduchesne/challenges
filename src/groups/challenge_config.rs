@@ -18,6 +18,8 @@ impl fmt::Display for ChallengeError {
         write!(f, "{}", self.message)
     }
 }
+
+#[derive(Clone, PartialEq)]
 pub enum VariableType {
     Integer,
     MultiLineString,
@@ -26,6 +28,6 @@ pub enum VariableType {
 pub trait ChallengeConfig {
     fn title(&self) -> &str;
     fn description(&self) -> &str;
-    fn variables(&self) -> HashMap<&str, VariableType>;
+    fn variables(&self) -> HashMap<String, VariableType>;
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError>;
 }

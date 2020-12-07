@@ -79,8 +79,8 @@ impl ChallengeConfig for Day5 {
         return "";
     }
 
-    fn variables(&self) -> HashMap<&str, crate::groups::challenge_config::VariableType> {
-        return hashmap! {"passes" => VariableType::MultiLineString};
+    fn variables(&self) -> HashMap<String, crate::groups::challenge_config::VariableType> {
+        return hashmap! {"passes".to_owned() => VariableType::MultiLineString};
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {

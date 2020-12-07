@@ -70,8 +70,8 @@ impl ChallengeConfig for Day2 {
         return "test2";
     }
 
-    fn variables(&self) -> HashMap<&str, crate::groups::challenge_config::VariableType> {
-        return hashmap! {"passwords" => VariableType::MultiLineString};
+    fn variables(&self) -> HashMap<String, crate::groups::challenge_config::VariableType> {
+        return hashmap! {"passwords".to_owned() => VariableType::MultiLineString};
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {

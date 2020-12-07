@@ -12,15 +12,15 @@ impl Day6 {}
 
 impl ChallengeConfig for Day6 {
     fn title(&self) -> &str {
-        return "Day 5: Custom Customs";
+        return "Day 6: Custom Customs";
     }
 
     fn description(&self) -> &str {
         return "";
     }
 
-    fn variables(&self) -> HashMap<&str, crate::groups::challenge_config::VariableType> {
-        return hashmap! {"answers" => VariableType::MultiLineString};
+    fn variables(&self) -> HashMap<String, crate::groups::challenge_config::VariableType> {
+        return hashmap! {"answers".to_owned() => VariableType::MultiLineString};
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {

@@ -1,13 +1,22 @@
 #[macro_use]
 extern crate lazy_static;
 
-use cursive::traits::{Nameable, Resizable, View};
-use cursive::view::{IntoBoxedView, SizeConstraint};
-use cursive::views::{LinearLayout, PaddedView, Panel, ScrollView, SelectView, TextView};
+use cursive::views::{
+    BoxedView, EditView, LinearLayout, PaddedView, Panel, ScrollView, SelectView, TextArea,
+    TextView,
+};
 use cursive::{align::HAlign, Cursive};
+use cursive::{
+    traits::{Nameable, Resizable, View},
+    views::Button,
+};
+use cursive::{
+    view::{IntoBoxedView, SizeConstraint},
+    views::ShadowView,
+};
 
 mod groups;
-use groups::group_manager::GroupManager;
+use groups::{challenge_config::VariableType, group_manager::GroupManager};
 
 fn pad<V>(v: V) -> PaddedView<V> {
     return PaddedView::lrtb(
@@ -35,7 +44,8 @@ fn update_view(s: &mut Cursive) {
         .get_group_challenge_names(user_data.selected_group.as_str())
         .unwrap();
 
-    if user_data.selected_challenge.is_none() {
+    let group_changed = user_data.selected_challenge.is_none();
+    if group_changed {
         user_data.selected_challenge = Some(challenges[0].clone());
     }
     let selected_challenge_name = user_data.selected_challenge.clone().unwrap();
@@ -45,27 +55,45 @@ fn update_view(s: &mut Cursive) {
             user_data.selected_group.as_str(),
             selected_challenge_name.as_str(),
         )
-        .unwrap();
-    let title = selected_challenge.title().to_owned();
+        .unwrap()
+        .clone();
     let description = selected_challenge.description().to_owned();
-    let content = format!("{}", description);
+    let variables = selected_challenge.variables().clone();
 
-    s.call_on_name("challenge_select", |view: &mut SelectView| {
-        view.clear();
-        for (i, challenge) in challenges.iter().enumerate() {
-            view.add_item_str(challenge);
-            if *challenge == selected_challenge_name {
-                view.set_selection(i);
+    if group_changed {
+        s.call_on_name("challenge_select", |view: &mut SelectView| {
+            view.clear();
+            for (i, challenge) in challenges.iter().enumerate() {
+                view.add_item_str(challenge);
+                if *challenge == selected_challenge_name {
+                    view.set_selection(i);
+                }
+            }
+        });
+    }
+
+    s.call_on_name("description", |view: &mut TextView| {
+        view.set_content(description);
+    });
+
+    s.call_on_name("content", |view: &mut LinearLayout| {
+        while view.len() > 2 {
+            view.remove_child(1);
+        }
+        for input in variables {
+            let name = format!("input-{}", input.0);
+            if input.1 == VariableType::MultiLineString {
+                view.insert_child(
+                    view.len() - 2,
+                    TextArea::new().content(input.0).with_name(name),
+                );
+            } else {
+                view.insert_child(
+                    view.len() - 2,
+                    EditView::new().content(input.0).with_name(name),
+                );
             }
         }
-    });
-
-    s.call_on_name("panel", |view: &mut Panel<TextView>| {
-        view.set_title(title);
-    });
-
-    s.call_on_name("content", |view: &mut TextView| {
-        view.set_content(content);
     });
 }
 
@@ -108,11 +136,14 @@ fn create_challenge_select() -> Box<dyn View> {
 }
 
 fn create_challenge_display() -> Box<dyn View> {
-    let panel = Panel::new(TextView::new("").with_name("content"));
-    return pad(panel
-        .with_name("panel")
-        .resized(SizeConstraint::Full, SizeConstraint::Full))
-    .as_boxed_view();
+    let button = Button::new("Solve", |s| {});
+    let panel = Panel::new(ScrollView::new(
+        LinearLayout::vertical()
+            .child(TextView::new("").with_name("description"))
+            .child(button)
+            .with_name("content"),
+    ));
+    return pad(panel.resized(SizeConstraint::Full, SizeConstraint::Full)).as_boxed_view();
 }
 
 fn main() {
