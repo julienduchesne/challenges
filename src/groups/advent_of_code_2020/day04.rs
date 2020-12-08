@@ -1,10 +1,11 @@
 use std::collections::HashMap;
 
+use maplit::hashmap;
+use regex::Regex;
+
 use super::super::challenge_config::ChallengeConfig;
 use super::super::challenge_config::ChallengeError;
 use super::super::challenge_config::VariableType;
-use maplit::hashmap;
-use regex::Regex;
 
 pub struct Day4 {}
 
@@ -79,7 +80,7 @@ impl ChallengeConfig for Day4 {
         return "";
     }
 
-    fn variables(&self) -> HashMap<String, crate::groups::challenge_config::VariableType> {
+    fn variables(&self) -> HashMap<String, VariableType> {
         return hashmap! {"passports".to_owned() => VariableType::MultiLineString};
     }
 
@@ -109,8 +110,9 @@ impl ChallengeConfig for Day4 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use rstest::rstest;
+
+    use super::*;
 
     #[rstest(
         passports,

@@ -1,10 +1,11 @@
 use std::collections::HashMap;
 
+use itertools::Itertools;
+use maplit::hashmap;
+
 use super::super::challenge_config::ChallengeConfig;
 use super::super::challenge_config::ChallengeError;
 use super::super::challenge_config::VariableType;
-use itertools::Itertools;
-use maplit::hashmap;
 
 fn slice_max_down(min: usize, max: usize) -> usize {
     return max - (max + 1 - min) / 2;
@@ -79,7 +80,7 @@ impl ChallengeConfig for Day5 {
         return "";
     }
 
-    fn variables(&self) -> HashMap<String, crate::groups::challenge_config::VariableType> {
+    fn variables(&self) -> HashMap<String, VariableType> {
         return hashmap! {"passes".to_owned() => VariableType::MultiLineString};
     }
 
@@ -123,8 +124,9 @@ impl ChallengeConfig for Day5 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use rstest::rstest;
+
+    use super::*;
 
     #[rstest(
         letters,

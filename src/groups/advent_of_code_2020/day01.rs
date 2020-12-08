@@ -1,7 +1,8 @@
 use std::collections::HashMap;
 
-use super::super::challenge_config::{ChallengeConfig, ChallengeError, VariableType};
 use maplit::hashmap;
+
+use super::super::challenge_config::{ChallengeConfig, ChallengeError, VariableType};
 
 pub struct Day1 {}
 
@@ -50,7 +51,7 @@ impl ChallengeConfig for Day1 {
         return "test1";
     }
 
-    fn variables(&self) -> HashMap<String, crate::groups::challenge_config::VariableType> {
+    fn variables(&self) -> HashMap<String, VariableType> {
         return hashmap! {"report".to_owned() => VariableType::MultiLineString};
     }
 
@@ -92,8 +93,9 @@ impl ChallengeConfig for Day1 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use rstest::rstest;
+
+    use super::*;
 
     #[rstest(
         input,

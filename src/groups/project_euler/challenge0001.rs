@@ -1,10 +1,11 @@
 use std::collections::HashMap;
 
+use maplit::hashmap;
+
 use super::super::{
     challenge_config::ChallengeConfig, challenge_config::ChallengeError,
     challenge_config::VariableType,
 };
-use maplit::hashmap;
 
 pub struct Challenge1 {}
 
@@ -68,7 +69,7 @@ Nam suscipit aliquam justo non lacinia. Nullam ligula purus, euismod sed porta e
 Donec ullamcorper, arcu vitae malesuada malesuada, quam ante tincidunt ligula, nec luctus nunc odio pharetra arcu. Nunc est mauris, feugiat vitae elementum nec, efficitur sit amet odio. Nunc tempor velit a velit pulvinar, quis eleifend mi lacinia. Mauris placerat augue in pretium consequat. In egestas varius massa at ultrices. Praesent laoreet semper enim. Aenean eu tortor consectetur, laoreet urna eget, lacinia mauris. Ut malesuada lorem at bibendum finibus. Ut rhoncus ante est, in cursus nibh ultrices id. Suspendisse fringilla dolor tellus, ac placerat urna tristique at.";
     }
 
-    fn variables(&self) -> HashMap<String, crate::groups::challenge_config::VariableType> {
+    fn variables(&self) -> HashMap<String, VariableType> {
         return hashmap! {"x".to_owned() => VariableType::Integer};
     }
 

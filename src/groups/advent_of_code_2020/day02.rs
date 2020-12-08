@@ -1,10 +1,11 @@
 use std::collections::HashMap;
 
+use maplit::hashmap;
+use regex::Regex;
+
 use super::super::challenge_config::ChallengeConfig;
 use super::super::challenge_config::ChallengeError;
 use super::super::challenge_config::VariableType;
-use maplit::hashmap;
-use regex::Regex;
 
 pub struct Day2 {}
 #[derive(Clone)]
@@ -70,7 +71,7 @@ impl ChallengeConfig for Day2 {
         return "test2";
     }
 
-    fn variables(&self) -> HashMap<String, crate::groups::challenge_config::VariableType> {
+    fn variables(&self) -> HashMap<String, VariableType> {
         return hashmap! {"passwords".to_owned() => VariableType::MultiLineString};
     }
 
@@ -100,8 +101,9 @@ impl ChallengeConfig for Day2 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use rstest::rstest;
+
+    use super::*;
 
     #[rstest(
         input,
