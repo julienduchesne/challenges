@@ -1,18 +1,15 @@
 #[macro_use]
 extern crate lazy_static;
 
-use cursive::views::{
-    BoxedView, EditView, LinearLayout, PaddedView, Panel, ScrollView, SelectView, TextArea,
-    TextView,
-};
-use cursive::{align::HAlign, Cursive};
 use cursive::{
+    align::HAlign,
     traits::{Nameable, Resizable, View},
-    views::Button,
-};
-use cursive::{
     view::{IntoBoxedView, SizeConstraint},
-    views::ShadowView,
+    views::{
+        Button, Dialog, EditView, LinearLayout, PaddedView, Panel, ScrollView, SelectView,
+        TextArea, TextView,
+    },
+    Cursive,
 };
 
 mod groups;
@@ -97,6 +94,14 @@ fn update_view(s: &mut Cursive) {
     });
 }
 
+fn solve(s: &mut Cursive) {
+    s.add_layer(
+        Dialog::around(TextView::new("Hello Dialog!"))
+            .title("Result")
+            .dismiss_button("OK"),
+    );
+}
+
 fn create_group_select(group_names: Vec<String>) -> Box<dyn View> {
     let mut group_select = SelectView::<String>::new()
         .h_align(HAlign::Center)
@@ -136,7 +141,7 @@ fn create_challenge_select() -> Box<dyn View> {
 }
 
 fn create_challenge_display() -> Box<dyn View> {
-    let button = Button::new("Solve", |s| {});
+    let button = Button::new("Solve", |s| solve(s));
     let panel = Panel::new(ScrollView::new(
         LinearLayout::vertical()
             .child(TextView::new("").with_name("description"))

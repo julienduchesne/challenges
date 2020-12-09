@@ -1,6 +1,8 @@
 use std::{collections::HashMap, fmt};
 
-#[derive(Debug, Clone)]
+use thiserror::Error;
+
+#[derive(Debug, Clone, Error)]
 pub struct ChallengeError {
     message: String,
 }
