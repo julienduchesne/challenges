@@ -8,6 +8,7 @@ use super::{
     day06::Day6,
     day07::Day7,
     day08::Day8,
+    day09::Day9,
 };
 
 pub struct AdventOfCode2020 {
@@ -29,6 +30,7 @@ impl GroupConfig for AdventOfCode2020 {
                 Box::new(Day6 {}),
                 Box::new(Day7 {}),
                 Box::new(Day8 {}),
+                Box::new(Day9 {}),
             ],
         };
     }
