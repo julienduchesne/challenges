@@ -1,19 +1,20 @@
 #[macro_use]
 extern crate lazy_static;
 
+use std::collections::HashMap;
+
 use cursive::{
     align::HAlign,
     traits::{Nameable, Resizable, View},
     view::{IntoBoxedView, SizeConstraint},
     views::{
-        Button, Dialog, EditView, LinearLayout, PaddedView, Panel, ScrollView, SelectView,
-        TextArea, TextView,
+        Button, Dialog, LinearLayout, PaddedView, Panel, ScrollView, SelectView, TextArea, TextView,
     },
     Cursive,
 };
 
 mod groups;
-use groups::{challenge_config::VariableType, group_manager::GroupManager};
+use groups::group_manager::GroupManager;
 
 fn pad<V>(v: V) -> PaddedView<V> {
     return PaddedView::lrtb(
@@ -26,6 +27,7 @@ struct UserData {
     group_manager: GroupManager,
     selected_group: String,
     selected_challenge: Option<String>,
+    fields: Option<Vec<String>>,
 }
 
 impl UserData {
@@ -54,6 +56,7 @@ fn update_view(s: &mut Cursive) {
         )
         .unwrap()
         .clone();
+    user_data.fields = Some(selected_challenge.variables().clone());
     let description = selected_challenge.description().to_owned();
     let variables = selected_challenge.variables().clone();
 
@@ -74,29 +77,55 @@ fn update_view(s: &mut Cursive) {
     });
 
     s.call_on_name("content", |view: &mut LinearLayout| {
-        while view.len() > 2 {
+        while view.len() > 1 {
             view.remove_child(1);
         }
         for input in variables {
-            let name = format!("input-{}", input.0);
-            if input.1 == VariableType::MultiLineString {
-                view.insert_child(
-                    view.len() - 2,
-                    TextArea::new().content(input.0).with_name(name),
-                );
-            } else {
-                view.insert_child(
-                    view.len() - 2,
-                    EditView::new().content(input.0).with_name(name),
-                );
-            }
+            let name = format!("input-{}", input);
+            view.insert_child(
+                view.len(),
+                Panel::new(
+                    LinearLayout::vertical().child(TextView::new(input)).child(
+                        TextArea::new()
+                            .with_name(name)
+                            .resized(SizeConstraint::Free, SizeConstraint::AtLeast(5)),
+                    ),
+                )
+                .resized(SizeConstraint::Full, SizeConstraint::Free),
+            );
         }
     });
 }
 
 fn solve(s: &mut Cursive) {
+    let user_data: &mut UserData = s.user_data::<UserData>().unwrap();
+    let fields = user_data.fields.clone().unwrap();
+    let mut variable_values: HashMap<String, String> = HashMap::new();
+    for var_name in fields {
+        let input_name = format!("input-{}", var_name);
+        let var_value: String = s
+            .call_on_name(input_name.as_str(), |v: &mut TextArea| {
+                return v.get_content().to_owned();
+            })
+            .unwrap_or("".to_owned());
+        variable_values.insert(var_name, var_value);
+    }
+
+    let user_data: &mut UserData = s.user_data::<UserData>().unwrap();
+    let selected_challenge = user_data
+        .group_manager
+        .get_challenge(
+            user_data.selected_group.as_str(),
+            user_data.selected_challenge.clone().unwrap().as_str(),
+        )
+        .unwrap();
+    let message = match selected_challenge.solve2(variable_values) {
+        Ok(solution) => solution,
+        Err(e) => format!("Error:\n{}", e),
+    };
+
     s.add_layer(
-        Dialog::around(TextView::new("Hello Dialog!"))
+        Dialog::around(TextView::new(message))
             .title("Result")
             .dismiss_button("OK"),
     );
@@ -142,12 +171,18 @@ fn create_challenge_select() -> Box<dyn View> {
 
 fn create_challenge_display() -> Box<dyn View> {
     let button = Button::new("Solve", |s| solve(s));
-    let panel = Panel::new(ScrollView::new(
+    let panel = Panel::new(
         LinearLayout::vertical()
-            .child(TextView::new("").with_name("description"))
-            .child(button)
-            .with_name("content"),
-    ));
+            .child(
+                ScrollView::new(
+                    LinearLayout::vertical()
+                        .child(TextView::new("").with_name("description"))
+                        .with_name("content"),
+                )
+                .resized(SizeConstraint::Full, SizeConstraint::Full),
+            )
+            .child(button),
+    );
     return pad(panel.resized(SizeConstraint::Full, SizeConstraint::Full)).as_boxed_view();
 }
 
@@ -160,6 +195,7 @@ fn main() {
         group_manager: GroupManager::new(),
         selected_group: first_group.to_owned(),
         selected_challenge: None,
+        fields: None,
     });
 
     let linear_layout = LinearLayout::horizontal()
@@ -170,5 +206,6 @@ fn main() {
     siv.add_fullscreen_layer(linear_layout);
     update_view(&mut siv);
 
+    siv.set_autorefresh(false);
     siv.run();
 }

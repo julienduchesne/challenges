@@ -1,11 +1,9 @@
 use std::collections::HashMap;
 
 use itertools::Itertools;
-use maplit::hashmap;
 
 use super::super::challenge_config::ChallengeConfig;
 use super::super::challenge_config::ChallengeError;
-use super::super::challenge_config::VariableType;
 
 pub struct Day6 {}
 
@@ -20,8 +18,8 @@ impl ChallengeConfig for Day6 {
         return "";
     }
 
-    fn variables(&self) -> HashMap<String, VariableType> {
-        return hashmap! {"answers".to_owned() => VariableType::MultiLineString};
+    fn variables(&self) -> Vec<String> {
+        return vec!["answers".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
@@ -53,6 +51,7 @@ impl ChallengeConfig for Day6 {
 
 #[cfg(test)]
 mod tests {
+    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;

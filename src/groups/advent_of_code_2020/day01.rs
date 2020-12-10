@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 
-use maplit::hashmap;
-
-use super::super::challenge_config::{ChallengeConfig, ChallengeError, VariableType};
+use super::super::challenge_config::{ChallengeConfig, ChallengeError};
 
 pub struct Day1 {}
 
@@ -48,11 +46,12 @@ impl ChallengeConfig for Day1 {
     }
 
     fn description(&self) -> &str {
-        return "test1";
+        return "Part 1: Find the two entries that sum to 2020; what do you get if you multiply them together?
+Part 2: What is the product of the three entries that sum to 2020?";
     }
 
-    fn variables(&self) -> HashMap<String, VariableType> {
-        return hashmap! {"report".to_owned() => VariableType::MultiLineString};
+    fn variables(&self) -> Vec<String> {
+        return vec!["report".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
@@ -93,6 +92,7 @@ impl ChallengeConfig for Day1 {
 
 #[cfg(test)]
 mod tests {
+    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;

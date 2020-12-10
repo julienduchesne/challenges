@@ -2,11 +2,9 @@ use std::collections::{HashMap, HashSet};
 use std::convert::TryInto;
 
 use anyhow::Result;
-use maplit::hashmap;
 
 use super::super::challenge_config::ChallengeConfig;
 use super::super::challenge_config::ChallengeError;
-use super::super::challenge_config::VariableType;
 
 struct Instruction {
     jump: isize,
@@ -134,8 +132,8 @@ impl ChallengeConfig for Day8 {
         return "";
     }
 
-    fn variables(&self) -> HashMap<String, VariableType> {
-        return hashmap! {"instructions".to_owned() => VariableType::MultiLineString};
+    fn variables(&self) -> Vec<String> {
+        return vec!["instructions".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
@@ -154,6 +152,7 @@ impl ChallengeConfig for Day8 {
 
 #[cfg(test)]
 mod tests {
+    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;

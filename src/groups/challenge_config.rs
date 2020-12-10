@@ -21,15 +21,17 @@ impl fmt::Display for ChallengeError {
     }
 }
 
-#[derive(Clone, PartialEq)]
-pub enum VariableType {
-    Integer,
-    MultiLineString,
-    String,
-}
 pub trait ChallengeConfig {
     fn title(&self) -> &str;
     fn description(&self) -> &str;
-    fn variables(&self) -> HashMap<String, VariableType>;
+    fn variables(&self) -> Vec<String>;
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError>;
+    fn solve2(&self, variables: HashMap<String, String>) -> Result<String, ChallengeError> {
+        return self.solve(
+            variables
+                .iter()
+                .map(|(k, v)| (k.as_str(), v.as_str()))
+                .collect(),
+        );
+    }
 }
