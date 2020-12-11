@@ -26,7 +26,7 @@ pub trait ChallengeConfig {
     fn description(&self) -> &str;
     fn variables(&self) -> Vec<String>;
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError>;
-    fn solve2(&self, variables: HashMap<String, String>) -> Result<String, ChallengeError> {
+    fn solve_string(&self, variables: HashMap<String, String>) -> Result<String, ChallengeError> {
         return self.solve(
             variables
                 .iter()

@@ -119,7 +119,7 @@ fn solve(s: &mut Cursive) {
             user_data.selected_challenge.clone().unwrap().as_str(),
         )
         .unwrap();
-    let message = match selected_challenge.solve2(variable_values) {
+    let message = match selected_challenge.solve_string(variable_values) {
         Ok(solution) => solution,
         Err(e) => format!("Error:\n{}", e),
     };
