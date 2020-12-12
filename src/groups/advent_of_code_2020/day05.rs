@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use anyhow::Result;
 use itertools::Itertools;
 
 use super::super::challenge_config::ChallengeConfig;
@@ -82,7 +83,7 @@ impl ChallengeConfig for Day5 {
         return vec!["passes".to_owned()];
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
         let passes: Vec<BoardingPass> = variables["passes"]
             .replace("  ", "")
             .split_whitespace()
@@ -95,10 +96,7 @@ impl ChallengeConfig for Day5 {
 
         let part_one_results: Result<Vec<usize>, _> =
             passes.iter().map(|p| p.get_seat_id()).collect();
-        let taken_seats: Vec<usize> = match part_one_results.clone() {
-            Ok(results) => results.iter().map(|x| *x).sorted().collect(),
-            Err(e) => return Err(e),
-        };
+        let taken_seats: Vec<usize> = part_one_results?.iter().map(|x| *x).sorted().collect();
 
         let part_one = taken_seats.iter().max().unwrap_or(&(0 as usize));
 
@@ -113,7 +111,7 @@ impl ChallengeConfig for Day5 {
         }
 
         if part_two == 0 {
-            return Err(ChallengeError::new("Unable to find an answer for part two"));
+            return Err(ChallengeError::new("Unable to find an answer for part two").into());
         }
 
         return Ok(format!("Part 1: {}\nPart 2: {:?}", part_one, part_two).to_string());

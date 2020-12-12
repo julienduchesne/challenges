@@ -136,7 +136,7 @@ impl ChallengeConfig for Day8 {
         return vec!["instructions".to_owned()];
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
         let part_one = match self.solve_part_one(variables.clone()) {
             Ok(result) => result,
             Err(e) => return Err(e.downcast().unwrap()),

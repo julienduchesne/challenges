@@ -1,10 +1,10 @@
 use std::collections::HashMap;
 
+use anyhow::Result;
 use regex::Regex;
 
 use super::super::challenge_config::ChallengeConfig;
 use super::super::challenge_config::ChallengeError;
-
 pub struct Day2 {}
 #[derive(Clone)]
 struct Line {
@@ -73,26 +73,17 @@ impl ChallengeConfig for Day2 {
         return vec!["passwords".to_owned()];
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
         let report: &str = variables["passwords"];
-        let lines: Result<Vec<_>, _> = report
+        let lines: Vec<Line> = report
             .split("\n")
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
             .map(Line::parse)
-            .collect();
-        if lines.is_err() {
-            return Err(ChallengeError::new(
-                format!(
-                    "Error parsing the input: {}",
-                    lines.err().unwrap().to_string()
-                )
-                .as_str(),
-            ));
-        }
+            .collect::<Result<_, _>>()?;
 
-        let part_one = self.solve_part_one(lines.clone().unwrap());
-        let part_two = self.solve_part_two(lines.clone().unwrap());
+        let part_one = self.solve_part_one(lines.clone());
+        let part_two = self.solve_part_two(lines.clone());
         return Ok(format!("Part 1: {}\nPart 2: {}", part_one, part_two).to_string());
     }
 }

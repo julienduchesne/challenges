@@ -1,5 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
+use anyhow::Result;
 use regex::Regex;
 
 use super::super::challenge_config::ChallengeConfig;
@@ -110,11 +111,8 @@ impl ChallengeConfig for Day7 {
         return vec!["rules".to_owned()];
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
-        let rules = match self.parse_rules(variables["rules"]) {
-            Ok(rules) => rules,
-            Err(e) => return Err(e),
-        };
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
+        let rules = self.parse_rules(variables["rules"])?;
         let part_one = self.solve_part_one(rules.clone(), "shiny gold bag");
         let part_two = self.solve_part_two(rules.clone(), "shiny gold bag");
 

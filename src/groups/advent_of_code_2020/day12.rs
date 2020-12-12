@@ -3,7 +3,6 @@ use std::collections::HashMap;
 use anyhow::Result;
 
 use super::super::challenge_config::ChallengeConfig;
-use super::super::challenge_config::ChallengeError;
 
 pub struct Day12 {}
 
@@ -78,7 +77,7 @@ impl ChallengeConfig for Day12 {
         return vec!["moves".to_owned()];
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
         let moves: Vec<(char, isize)> = variables["moves"]
             .split_whitespace()
             .map(|x| x.trim())

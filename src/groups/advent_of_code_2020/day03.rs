@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
+use anyhow::Result;
 use ndarray::{Array, Array2, Axis};
 
 use super::super::challenge_config::ChallengeConfig;
-use super::super::challenge_config::ChallengeError;
 
 pub struct Day3 {}
 
@@ -39,7 +39,7 @@ impl ChallengeConfig for Day3 {
         return vec!["map".to_owned(), "paths".to_owned()];
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
         let lines: Vec<&str> = variables["map"]
             .split("\n")
             .map(|x| x.trim())

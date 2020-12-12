@@ -7,7 +7,6 @@ use petgraph::{
 };
 
 use super::super::challenge_config::ChallengeConfig;
-use super::super::challenge_config::ChallengeError;
 pub struct Day10 {}
 
 impl ChallengeConfig for Day10 {
@@ -23,17 +22,13 @@ impl ChallengeConfig for Day10 {
         return vec!["adapters".to_owned()];
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
-        let mut numbers: Vec<usize> = match variables["adapters"]
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
+        let mut numbers: Vec<usize> = variables["adapters"]
             .split_whitespace()
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
             .map(|x| x.parse::<usize>())
-            .collect()
-        {
-            Ok(v) => v,
-            Err(e) => return Err(ChallengeError::new(&e.to_string())),
-        };
+            .collect::<Result<Vec<usize>, _>>()?;
         numbers.push(0);
         let max = numbers.iter().max().unwrap() + 3;
         numbers.push(max);

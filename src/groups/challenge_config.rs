@@ -1,5 +1,6 @@
 use std::{collections::HashMap, fmt};
 
+use anyhow::Result;
 use thiserror::Error;
 
 #[derive(Debug, Clone, Error)]
@@ -25,8 +26,8 @@ pub trait ChallengeConfig {
     fn title(&self) -> &str;
     fn description(&self) -> &str;
     fn variables(&self) -> Vec<String>;
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError>;
-    fn solve_string(&self, variables: HashMap<String, String>) -> Result<String, ChallengeError> {
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String>;
+    fn solve_string(&self, variables: HashMap<String, String>) -> Result<String> {
         return self.solve(
             variables
                 .iter()

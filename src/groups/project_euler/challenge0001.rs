@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 
-use super::super::{challenge_config::ChallengeConfig, challenge_config::ChallengeError};
+use anyhow::Result;
+
+use super::super::challenge_config::ChallengeConfig;
 
 pub struct Challenge1 {}
 
@@ -68,7 +70,7 @@ Donec ullamcorper, arcu vitae malesuada malesuada, quam ante tincidunt ligula, n
         return vec!["x".to_owned()];
     }
 
-    fn solve(&self, _variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
+    fn solve(&self, _variables: HashMap<&str, &str>) -> Result<String> {
         return Ok("Answer".to_string());
     }
 }

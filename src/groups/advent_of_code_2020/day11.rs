@@ -1,12 +1,11 @@
-use ndarray::Array;
-use ndarray::Array2;
-use ndarray::Axis;
 use std::collections::HashMap;
 
 use anyhow::Result;
+use ndarray::Array;
+use ndarray::Array2;
+use ndarray::Axis;
 
 use super::super::challenge_config::ChallengeConfig;
-use super::super::challenge_config::ChallengeError;
 
 const FLOOR: usize = 0;
 const FREE: usize = 1;
@@ -83,7 +82,7 @@ impl ChallengeConfig for Day11 {
         return vec!["seats".to_owned()];
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
         let lines: Vec<&str> = variables["seats"]
             .split("\n")
             .map(|x| x.trim())

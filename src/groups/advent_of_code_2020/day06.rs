@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
+use anyhow::Result;
 use itertools::Itertools;
 
 use super::super::challenge_config::ChallengeConfig;
-use super::super::challenge_config::ChallengeError;
 
 pub struct Day6 {}
 
@@ -22,7 +22,7 @@ impl ChallengeConfig for Day6 {
         return vec!["answers".to_owned()];
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
         let input_without_spaces = variables["answers"].replace(" ", "");
         let groups: Vec<&str> = input_without_spaces
             .split("\n\n")

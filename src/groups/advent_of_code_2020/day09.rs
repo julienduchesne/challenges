@@ -4,7 +4,7 @@ use anyhow::Result;
 use itertools::Itertools;
 
 use super::super::challenge_config::ChallengeConfig;
-use super::super::challenge_config::ChallengeError;
+
 pub struct Day9 {}
 
 impl ChallengeConfig for Day9 {
@@ -20,21 +20,14 @@ impl ChallengeConfig for Day9 {
         return vec!["numbers".to_owned(), "preamble length".to_owned()];
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
-        let preamble_length = match variables["preamble length"].parse::<usize>() {
-            Ok(v) => v,
-            Err(_) => return Err(ChallengeError::new("Unable to parse preamble length")),
-        };
-        let numbers: Vec<usize> = match variables["numbers"]
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
+        let preamble_length: usize = variables["preamble length"].parse::<usize>()?;
+        let numbers: Vec<usize> = variables["numbers"]
             .split_whitespace()
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
             .map(|x| x.parse::<usize>())
-            .collect()
-        {
-            Ok(v) => v,
-            Err(e) => return Err(ChallengeError::new(&e.to_string())),
-        };
+            .collect::<Result<_, _>>()?;
 
         // Part 1: Find the number that doesn't have two other numbers before it that sum to it
         let mut part_one = 0;

@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
+use anyhow::Result;
 use regex::Regex;
 
 use super::super::challenge_config::ChallengeConfig;
-use super::super::challenge_config::ChallengeError;
 
 pub struct Day4 {}
 
@@ -82,7 +82,7 @@ impl ChallengeConfig for Day4 {
         return vec!["passports".to_owned()];
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String, ChallengeError> {
+    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
         let input_without_double_spaces = variables["passports"].replace("  ", "");
         let blocks: Vec<&str> = input_without_double_spaces
             .split("\n\n")
