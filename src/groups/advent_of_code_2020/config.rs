@@ -47,7 +47,7 @@ impl GroupConfig for AdventOfCode2020 {
         return "Advent of Code 2020";
     }
     fn url(&self) -> &str {
-        return "https://adventofcode.com/";
+        return "https://adventofcode.com/2020";
     }
 
     fn challenges(&self) -> &Vec<Box<dyn ChallengeConfig>> {
