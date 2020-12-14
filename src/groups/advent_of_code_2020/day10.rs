@@ -71,7 +71,6 @@ impl ChallengeConfig for Day10 {
 
         let part_one = jump1 * jump3;
 
-        // let part_two: usize = all_simple_paths::<Vec<usize>, _>(&graph, 0, max, 1, None).count();
         return Ok(format!("Part 1: {}\nPart 2: {}", part_one, part_two).to_string());
     }
 }

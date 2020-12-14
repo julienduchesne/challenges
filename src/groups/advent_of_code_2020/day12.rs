@@ -93,7 +93,6 @@ impl ChallengeConfig for Day12 {
         let part_one = self.solve_part_one(moves.clone());
         let part_two = self.solve_part_two(moves.clone());
 
-        // let part_two: usize = all_simple_paths::<Vec<usize>, _>(&graph, 0, max, 1, None).count();
         return Ok(format!("Part 1: {}\nPart 2: {}", part_one, part_two).to_string());
     }
 }
