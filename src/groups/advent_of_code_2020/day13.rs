@@ -32,11 +32,7 @@ impl ChallengeConfig for Day13 {
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec![
-            "earliest_time".to_owned(),
-            "buses".to_owned(),
-            "part_two_start_count".to_owned(),
-        ];
+        return vec!["earliest_time".to_owned(), "buses".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
