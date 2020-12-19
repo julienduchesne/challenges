@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 
 use anyhow::Result;
-use ndarray::{Array, Array2, Array3, Array4, Axis};
 
 use super::super::challenge_config::ChallengeConfig;
 use crate::groups::challenge_config::ChallengeError;

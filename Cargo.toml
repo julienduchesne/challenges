@@ -11,6 +11,7 @@ rstest = "0.6.4"
 
 [dependencies]
 anyhow = "1.0.35"
+lru = "0.6.2"
 itertools = "0.9.0"
 lazy_static = "1.4.0"
 maplit = "1.0.2"
