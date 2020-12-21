@@ -141,7 +141,6 @@ impl ChallengeConfig for Day19 {
             .iter()
             .filter(|m| rules.matches_forty_two_and_thirty_one(m).unwrap_or(false))
             .collect();
-        println!("{:?}", part_two_matches);
         let part_two: usize = part_two_matches.len();
 
         return Ok(format!("Part 1: {}\nPart 2: {}", part_one, part_two).to_string());

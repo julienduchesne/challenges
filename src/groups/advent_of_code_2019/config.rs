@@ -1,4 +1,3 @@
-
 use super::{
     super::{challenge_config::ChallengeConfig, group_config::GroupConfig},
     day01::Day1,

@@ -127,7 +127,6 @@ impl ChallengeConfig for Day16 {
                 if rule.possible_positions.len() == 1 {
                     remaining_columns.remove(rule.possible_positions.iter().next().unwrap());
                 }
-                println!("{}: {:?}", rule.name, rule.possible_positions);
             }
 
             if rules.iter().all(|r| r.possible_positions.len() == 1) {
