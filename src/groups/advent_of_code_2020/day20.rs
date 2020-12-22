@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use anyhow::Result;
-use ndarray::{arr2, Array, Array2, Axis};
+use ndarray::{Array, Array2, Axis};
 use num_integer::Roots;
 use rand::seq::SliceRandom;
 
@@ -170,7 +170,7 @@ impl ChallengeConfig for Day20 {
         let mut handled: HashSet<usize> = HashSet::new();
         for x in 0..size {
             for y in 0..size {
-                let mut new_value = 0;
+                let new_value: usize;
                 if x == 0 && y == 0 {
                     new_value = corner_tiles.iter().next().unwrap().id;
                 } else if x == 0 {
@@ -311,6 +311,7 @@ impl ChallengeConfig for Day20 {
 #[cfg(test)]
 mod tests {
     use maplit::hashmap;
+    use ndarray::arr2;
     use rstest::rstest;
 
     use super::*;
