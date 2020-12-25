@@ -4,7 +4,7 @@ use anyhow::Result;
 use modinverse::egcd;
 use num_integer::Integer;
 
-use super::super::challenge_config::ChallengeConfig;
+use crate::groups::challenge_config::ChallengeConfig;
 
 pub struct Day13 {}
 

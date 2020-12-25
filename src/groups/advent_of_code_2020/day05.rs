@@ -3,8 +3,7 @@ use std::collections::HashMap;
 use anyhow::Result;
 use itertools::Itertools;
 
-use super::super::challenge_config::ChallengeConfig;
-use super::super::challenge_config::ChallengeError;
+use crate::groups::challenge_config::{ChallengeConfig, ChallengeError};
 
 fn slice_max_down(min: usize, max: usize) -> usize {
     return max - (max + 1 - min) / 2;

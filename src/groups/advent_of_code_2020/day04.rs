@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use anyhow::Result;
 use regex::Regex;
 
-use super::super::challenge_config::ChallengeConfig;
+use crate::groups::challenge_config::ChallengeConfig;
 
 pub struct Day4 {}
 

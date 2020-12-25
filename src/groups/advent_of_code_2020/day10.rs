@@ -6,7 +6,8 @@ use petgraph::{
     graphmap::DiGraphMap,
 };
 
-use super::super::challenge_config::ChallengeConfig;
+use crate::groups::challenge_config::ChallengeConfig;
+
 pub struct Day10 {}
 
 impl ChallengeConfig for Day10 {

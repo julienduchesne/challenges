@@ -5,7 +5,7 @@ use ndarray::{Array, Array2, Axis};
 use num_integer::Roots;
 use rand::seq::SliceRandom;
 
-use super::super::challenge_config::ChallengeConfig;
+use crate::groups::challenge_config::ChallengeConfig;
 
 pub struct Day20 {}
 trait FlipRotate {

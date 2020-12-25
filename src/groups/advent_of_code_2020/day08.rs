@@ -1,10 +1,11 @@
-use std::collections::{HashMap, HashSet};
-use std::convert::TryInto;
+use std::{
+    collections::{HashMap, HashSet},
+    convert::TryInto,
+};
 
 use anyhow::Result;
 
-use super::super::challenge_config::ChallengeConfig;
-use super::super::challenge_config::ChallengeError;
+use crate::groups::challenge_config::{ChallengeConfig, ChallengeError};
 
 struct Instruction {
     jump: isize,

@@ -1,11 +1,9 @@
 use std::collections::HashMap;
 
 use anyhow::Result;
-use ndarray::Array;
-use ndarray::Array2;
-use ndarray::Axis;
+use ndarray::{Array, Array2, Axis};
 
-use super::super::challenge_config::ChallengeConfig;
+use crate::groups::challenge_config::ChallengeConfig;
 
 const FLOOR: usize = 0;
 const FREE: usize = 1;

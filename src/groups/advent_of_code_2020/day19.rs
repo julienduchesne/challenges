@@ -1,11 +1,13 @@
-use std::collections::HashMap;
-use std::collections::HashSet;
-use std::iter::FromIterator;
+use std::{
+    collections::{HashMap, HashSet},
+    iter::FromIterator,
+};
 
 use anyhow::Result;
 use lru::LruCache;
 
-use super::super::challenge_config::ChallengeConfig;
+use crate::groups::challenge_config::ChallengeConfig;
+
 pub struct Day19 {}
 struct Rules {
     rules: HashMap<usize, String>,

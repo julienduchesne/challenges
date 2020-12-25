@@ -1,5 +1,7 @@
-use super::super::{challenge_config::ChallengeConfig, group_config::GroupConfig};
-use super::challenge0001::Challenge1;
+use super::{
+    super::{challenge_config::ChallengeConfig, group_config::GroupConfig},
+    challenge0001::Challenge1,
+};
 
 pub struct ProjectEuler {
     challenges: Vec<Box<dyn ChallengeConfig>>,

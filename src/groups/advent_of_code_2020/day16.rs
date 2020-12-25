@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 
 use anyhow::Result;
 
-use super::super::{challenge_config::ChallengeConfig, challenge_config::ChallengeError};
+use crate::groups::challenge_config::{ChallengeConfig, ChallengeError};
 
 pub struct Day16 {}
 struct Rule {

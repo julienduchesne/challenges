@@ -1,10 +1,9 @@
-use std::collections::HashMap;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use anyhow::Result;
 use itertools::Itertools;
 
-use super::super::challenge_config::ChallengeConfig;
+use crate::groups::challenge_config::ChallengeConfig;
 pub struct Day21 {}
 
 impl ChallengeConfig for Day21 {
