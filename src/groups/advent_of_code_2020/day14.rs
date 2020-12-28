@@ -19,11 +19,11 @@ impl ChallengeConfig for Day14 {
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["instructions".to_owned()];
+        return vec!["Instructions".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let instructions: Vec<&str> = variables["instructions"]
+        let instructions: Vec<&str> = variables["Instructions"]
             .split("\n")
             .map(str::trim)
             .filter(|x| !x.is_empty())
@@ -118,7 +118,7 @@ mod tests {
     fn solve(instructions: &str, expected: &str) {
         let day = Day14 {};
         assert_eq!(
-            day.solve(hashmap! {"instructions" => instructions})
+            day.solve(hashmap! {"Instructions" => instructions})
                 .unwrap(),
             expected
         );

@@ -36,12 +36,12 @@ impl ChallengeConfig for Day25 {
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["Card Public Key".to_owned(), "Door Public Key".to_owned()];
+        return vec!["Card public key".to_owned(), "Door public key".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let card_public_key = variables["Card Public Key"].parse::<u64>()?;
-        let door_public_key = variables["Door Public Key"].parse::<u64>()?;
+        let card_public_key = variables["Card public key"].parse::<u64>()?;
+        let door_public_key = variables["Door public key"].parse::<u64>()?;
         let card_loop_size = Self::find_loop_size(card_public_key)?;
         let mut result = 1;
         for _ in 0..card_loop_size {
@@ -70,7 +70,7 @@ mod tests {
         let day = Day25 {};
         assert_eq!(
             day.solve(
-                hashmap! {"Card Public Key" => card_public_key, "Door Public Key" => door_public_key }
+                hashmap! {"Card public key" => card_public_key, "Door public key" => door_public_key }
             )
             .unwrap(),
             expected

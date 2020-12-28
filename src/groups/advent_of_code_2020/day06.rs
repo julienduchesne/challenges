@@ -19,11 +19,11 @@ impl ChallengeConfig for Day6 {
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["answers".to_owned()];
+        return vec!["Answers".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let input_without_spaces = variables["answers"].replace(" ", "");
+        let input_without_spaces = variables["Answers"].replace(" ", "");
         let groups: Vec<&str> = input_without_spaces
             .split("\n\n")
             .map(|x| x.trim())
@@ -81,7 +81,7 @@ mod tests {
     fn solve(answers: &str, expected: &str) {
         let day = Day6 {};
         assert_eq!(
-            day.solve(hashmap! {"answers" => answers}).unwrap(),
+            day.solve(hashmap! {"Answers" => answers}).unwrap(),
             expected
         );
     }

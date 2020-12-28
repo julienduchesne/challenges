@@ -79,11 +79,11 @@ impl ChallengeConfig for Day5 {
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["passes".to_owned()];
+        return vec!["Passes".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let passes: Vec<BoardingPass> = variables["passes"]
+        let passes: Vec<BoardingPass> = variables["Passes"]
             .replace("  ", "")
             .split_whitespace()
             .map(|x| x.trim())
@@ -153,6 +153,6 @@ mod tests {
     )]
     fn solve(passes: &str, expected: &str) {
         let day = Day5 {};
-        assert_eq!(day.solve(hashmap! {"passes" => passes}).unwrap(), expected);
+        assert_eq!(day.solve(hashmap! {"Passes" => passes}).unwrap(), expected);
     }
 }

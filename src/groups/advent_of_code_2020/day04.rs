@@ -79,11 +79,11 @@ impl ChallengeConfig for Day4 {
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["passports".to_owned()];
+        return vec!["Passports".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let input_without_double_spaces = variables["passports"].replace("  ", "");
+        let input_without_double_spaces = variables["Passports"].replace("  ", "");
         let blocks: Vec<&str> = input_without_double_spaces
             .split("\n\n")
             .map(|x| x.trim())
@@ -169,7 +169,7 @@ mod tests {
     fn solve(passports: &str, expected: &str) {
         let day = Day4 {};
         assert_eq!(
-            day.solve(hashmap! {"passports" => passports}).unwrap(),
+            day.solve(hashmap! {"Passports" => passports}).unwrap(),
             expected
         );
     }

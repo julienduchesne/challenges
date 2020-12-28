@@ -66,15 +66,15 @@ impl ChallengeConfig for Day2 {
     }
 
     fn description(&self) -> &str {
-        return "test2";
+        return "";
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["passwords".to_owned()];
+        return vec!["Passwords".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let report: &str = variables["passwords"];
+        let report: &str = variables["Passwords"];
         let lines: Vec<Line> = report
             .split("\n")
             .map(|x| x.trim())
@@ -108,7 +108,7 @@ mod tests {
     fn solve(input: &str, expected: &str) {
         let day = Day2 {};
         assert_eq!(
-            day.solve(hashmap! {"passwords" => input}).unwrap(),
+            day.solve(hashmap! {"Passwords" => input}).unwrap(),
             expected
         );
     }

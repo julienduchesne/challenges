@@ -18,12 +18,12 @@ impl ChallengeConfig for Day15 {
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["starting_numbers".to_owned(), "nth_number".to_owned()];
+        return vec!["Starting numbers".to_owned(), "nth number".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let nth_number: usize = variables["nth_number"].parse::<usize>()?;
-        let numbers: Vec<usize> = variables["starting_numbers"]
+        let nth_number: usize = variables["nth number"].parse::<usize>()?;
+        let numbers: Vec<usize> = variables["Starting numbers"]
             .split(",")
             .map(str::trim)
             .filter(|x| !x.is_empty())
@@ -73,7 +73,7 @@ mod tests {
         let day = Day15 {};
         assert_eq!(
             day.solve(
-                hashmap! {"nth_number" => nth_number, "starting_numbers" => starting_numbers}
+                hashmap! {"nth number" => nth_number, "Starting numbers" => starting_numbers}
             )
             .unwrap(),
             expected

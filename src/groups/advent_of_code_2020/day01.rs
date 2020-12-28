@@ -49,11 +49,11 @@ Part 2: What is the product of the three entries that sum to 2020?";
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["report".to_owned()];
+        return vec!["Report".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let report: &str = variables["report"];
+        let report: &str = variables["Report"];
         let numbers: Vec<isize> = report
             .split("\n")
             .map(|x| x.trim())
@@ -106,14 +106,14 @@ mod tests {
     )]
     fn solve(input: &str, expected: &str) {
         let day1 = Day1 {};
-        assert_eq!(day1.solve(hashmap! {"report" => input}).unwrap(), expected);
+        assert_eq!(day1.solve(hashmap! {"Report" => input}).unwrap(), expected);
     }
 
     #[test]
     fn parsing_error() {
         let day1 = Day1 {};
         assert_eq!(
-            day1.solve(hashmap! {"report" => "abc"})
+            day1.solve(hashmap! {"Report" => "abc"})
                 .unwrap_err()
                 .to_string(),
             "invalid digit found in string"

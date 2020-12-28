@@ -107,11 +107,11 @@ impl ChallengeConfig for Day7 {
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["rules".to_owned()];
+        return vec!["Rules".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let rules = self.parse_rules(variables["rules"])?;
+        let rules = self.parse_rules(variables["Rules"])?;
         let part_one = self.solve_part_one(rules.clone(), "shiny gold bag");
         let part_two = self.solve_part_two(rules.clone(), "shiny gold bag");
 
@@ -154,6 +154,6 @@ mod tests {
     )]
     fn solve(rules: &str, expected: &str) {
         let day = Day7 {};
-        assert_eq!(day.solve(hashmap! {"rules" => rules}).unwrap(), expected);
+        assert_eq!(day.solve(hashmap! {"Rules" => rules}).unwrap(), expected);
     }
 }

@@ -32,12 +32,12 @@ impl ChallengeConfig for Day13 {
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["earliest_time".to_owned(), "buses".to_owned()];
+        return vec!["Earliest time".to_owned(), "Buses".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let earliest_time = variables["earliest_time"].parse::<i128>()?;
-        let buses: Vec<i128> = variables["buses"]
+        let earliest_time = variables["Earliest time"].parse::<i128>()?;
+        let buses: Vec<i128> = variables["Buses"]
             .split(",")
             .map(str::trim)
             .filter(|x| !x.is_empty())
@@ -103,7 +103,7 @@ mod tests {
     fn solve(earliest_time: &str, buses: &str, expected: &str) {
         let day = Day13 {};
         assert_eq!(
-            day.solve(hashmap! {"earliest_time" => earliest_time, "buses" => buses})
+            day.solve(hashmap! {"Earliest time" => earliest_time, "Buses" => buses})
                 .unwrap(),
             expected
         );

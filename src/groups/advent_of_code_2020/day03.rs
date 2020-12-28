@@ -36,11 +36,11 @@ impl ChallengeConfig for Day3 {
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["map".to_owned(), "paths".to_owned()];
+        return vec!["Map".to_owned(), "Paths".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let lines: Vec<&str> = variables["map"]
+        let lines: Vec<&str> = variables["Map"]
             .split("\n")
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -57,7 +57,7 @@ impl ChallengeConfig for Day3 {
                     .collect::<Vec<usize>>(),
             ));
         }
-        let path_vecs: Vec<Vec<isize>> = variables["paths"]
+        let path_vecs: Vec<Vec<isize>> = variables["Paths"]
             .split(";")
             .map(|x| x.split(",").map(|x| x.parse::<isize>().unwrap()).collect())
             .collect();
@@ -122,7 +122,7 @@ mod tests {
     fn solve(map: &str, path: &str, expected: &str) {
         let day = Day3 {};
         assert_eq!(
-            day.solve(hashmap! {"map" => map, "paths" => path}).unwrap(),
+            day.solve(hashmap! {"Map" => map, "Paths" => path}).unwrap(),
             expected
         );
     }

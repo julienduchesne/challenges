@@ -59,25 +59,25 @@ impl ChallengeConfig for Day16 {
 
     fn variables(&self) -> Vec<String> {
         return vec![
-            "rules".to_owned(),
-            "your_ticket".to_owned(),
-            "other_tickets".to_owned(),
+            "Rules".to_owned(),
+            "Your ticket".to_owned(),
+            "Other tickets".to_owned(),
         ];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let rule_lines = variables["rules"].split("\n");
+        let rule_lines = variables["Rules"].split("\n");
         let line_count = rule_lines.clone().count();
         let mut rules: Vec<Rule> = rule_lines
             .map(|r| Rule::parse(r.trim(), line_count))
             .collect::<Result<_, _>>()?;
 
-        let own_ticket: Vec<usize> = variables["your_ticket"]
+        let own_ticket: Vec<usize> = variables["Your ticket"]
             .split(",")
             .map(|x| x.trim().parse::<usize>())
             .collect::<Result<_, _>>()?;
 
-        let mut other_tickets: Vec<Vec<usize>> = variables["other_tickets"]
+        let mut other_tickets: Vec<Vec<usize>> = variables["Other tickets"]
             .split_whitespace()
             .map(|x| x.split(",").map(|x| x.trim().parse::<usize>()).collect())
             .collect::<Result<_, _>>()?;
@@ -174,7 +174,7 @@ mod tests {
         let day = Day16 {};
         assert_eq!(
             day.solve(
-                hashmap! {"rules" => rules, "your_ticket" => your_ticket, "other_tickets" => other_tickets,}
+                hashmap! {"Rules" => rules, "Your ticket" => your_ticket, "Other tickets" => other_tickets,}
             )
             .unwrap(),
             expected

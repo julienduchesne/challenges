@@ -16,6 +16,15 @@ use super::{
     day14::Day14,
     day15::Day15,
     day16::Day16,
+    day17::Day17,
+    day18::Day18,
+    day19::Day19,
+    day20::Day20,
+    day21::Day21,
+    day22::Day22,
+    day23::Day23,
+    day24::Day24,
+    day25::Day25,
 };
 
 pub struct AdventOfCode2020 {
@@ -45,6 +54,15 @@ impl GroupConfig for AdventOfCode2020 {
                 Box::new(Day14 {}),
                 Box::new(Day15 {}),
                 Box::new(Day16 {}),
+                Box::new(Day17 {}),
+                Box::new(Day18 {}),
+                Box::new(Day19 {}),
+                Box::new(Day20 {}),
+                Box::new(Day21 {}),
+                Box::new(Day22 {}),
+                Box::new(Day23 {}),
+                Box::new(Day24 {}),
+                Box::new(Day25 {}),
             ],
         };
     }

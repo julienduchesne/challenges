@@ -54,7 +54,7 @@ pub struct Day8 {}
 
 impl Day8 {
     fn solve_part_one(&self, variables: HashMap<&str, &str>) -> Result<isize> {
-        let instructions: Vec<Instruction> = match variables["instructions"]
+        let instructions: Vec<Instruction> = match variables["Instructions"]
             .split("\n")
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -82,7 +82,7 @@ impl Day8 {
     }
 
     fn solve_part_two(&self, variables: HashMap<&str, &str>) -> Result<isize> {
-        let lines: Vec<String> = variables["instructions"]
+        let lines: Vec<String> = variables["Instructions"]
             .split("\n")
             .map(|x| String::from(x.trim()))
             .filter(|x| !x.is_empty())
@@ -134,7 +134,7 @@ impl ChallengeConfig for Day8 {
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["instructions".to_owned()];
+        return vec!["Instructions".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
@@ -177,7 +177,7 @@ mod tests {
     fn solve(instructions: &str, expected: &str) {
         let day = Day8 {};
         assert_eq!(
-            day.solve(hashmap! {"instructions" => instructions})
+            day.solve(hashmap! {"Instructions" => instructions})
                 .unwrap(),
             expected
         );

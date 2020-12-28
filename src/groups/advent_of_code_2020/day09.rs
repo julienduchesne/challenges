@@ -17,12 +17,12 @@ impl ChallengeConfig for Day9 {
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["numbers".to_owned(), "preamble length".to_owned()];
+        return vec!["Numbers".to_owned(), "Preamble length".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let preamble_length: usize = variables["preamble length"].parse::<usize>()?;
-        let numbers: Vec<usize> = variables["numbers"]
+        let preamble_length: usize = variables["Preamble length"].parse::<usize>()?;
+        let numbers: Vec<usize> = variables["Numbers"]
             .split_whitespace()
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -134,7 +134,7 @@ mod tests {
     fn solve(numbers: &str, preamble_length: &str, expected: &str) {
         let day = Day9 {};
         assert_eq!(
-            day.solve(hashmap! {"numbers" => numbers, "preamble length" => preamble_length})
+            day.solve(hashmap! {"Numbers" => numbers, "Preamble length" => preamble_length})
                 .unwrap(),
             expected
         );

@@ -53,11 +53,11 @@ impl ChallengeConfig for Day17 {
     }
 
     fn variables(&self) -> Vec<String> {
-        return vec!["Initial Layer".to_owned()];
+        return vec!["Initial layer".to_owned()];
     }
 
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let lines: Vec<&str> = variables["Initial Layer"]
+        let lines: Vec<&str> = variables["Initial layer"]
             .split("\n")
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -165,7 +165,7 @@ mod tests {
     fn solve(initial_layer: &str, expected: &str) {
         let day = Day17 {};
         assert_eq!(
-            day.solve(hashmap! {"Initial Layer" => initial_layer})
+            day.solve(hashmap! {"Initial layer" => initial_layer})
                 .unwrap(),
             expected
         );
