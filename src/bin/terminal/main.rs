@@ -1,8 +1,6 @@
-#[macro_use]
-extern crate lazy_static;
-
 use std::collections::HashMap;
 
+use challenges::groups::group_manager::GroupManager;
 use cursive::{
     align::HAlign,
     traits::{Nameable, Resizable, View},
@@ -12,9 +10,6 @@ use cursive::{
     },
     Cursive,
 };
-
-mod groups;
-use groups::group_manager::GroupManager;
 
 fn pad<V>(v: V) -> PaddedView<V> {
     return PaddedView::lrtb(
