@@ -121,10 +121,6 @@ impl ChallengeConfig for Day19 {
         return "Day 19: Monster Messages";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Rules".to_owned(), "Messages".to_owned()];
     }

@@ -65,10 +65,6 @@ impl ChallengeConfig for Day2 {
         return "Day 2: Password Philosophy";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Passwords".to_owned()];
     }

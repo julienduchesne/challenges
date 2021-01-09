@@ -102,10 +102,6 @@ impl ChallengeConfig for Day7 {
         return "Day 7: Handy Haversacks";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Rules".to_owned()];
     }

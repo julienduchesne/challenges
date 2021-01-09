@@ -13,10 +13,6 @@ impl ChallengeConfig for Day1 {
         return "Day 1: The Tyranny of the Rocket Equation";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["masses".to_owned()];
     }

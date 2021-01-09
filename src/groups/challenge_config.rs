@@ -24,7 +24,9 @@ impl fmt::Display for ChallengeError {
 
 pub trait ChallengeConfig {
     fn title(&self) -> &str;
-    fn description(&self) -> &str;
+    fn description(&self) -> &str {
+        return "";
+    }
     fn variables(&self) -> Vec<String>;
     fn solve(&self, variables: HashMap<&str, &str>) -> Result<String>;
     fn solve_string(&self, variables: HashMap<String, String>) -> Result<String> {

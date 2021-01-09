@@ -53,10 +53,6 @@ impl ChallengeConfig for Day16 {
         return "Day 16: Ticket Translation";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec![
             "Rules".to_owned(),

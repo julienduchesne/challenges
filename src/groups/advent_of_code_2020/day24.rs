@@ -102,10 +102,6 @@ impl ChallengeConfig for Day24 {
         return "Day 24: Lobby Layout";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Tiles".to_owned()];
     }

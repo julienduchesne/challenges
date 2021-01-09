@@ -72,10 +72,6 @@ impl ChallengeConfig for Day11 {
         return "Day 11: Seating System";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Seats".to_owned()];
     }

@@ -31,10 +31,6 @@ impl ChallengeConfig for Day3 {
         return "Day 3: Toboggan Trajectory";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Map".to_owned(), "Paths".to_owned()];
     }

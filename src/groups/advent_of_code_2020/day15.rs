@@ -13,10 +13,6 @@ impl ChallengeConfig for Day15 {
         return "Day 15: Rambunctious Recitation";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Starting numbers".to_owned(), "nth number".to_owned()];
     }

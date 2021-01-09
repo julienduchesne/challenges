@@ -74,10 +74,6 @@ impl ChallengeConfig for Day4 {
         return "Day 4: Passport Processing";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Passports".to_owned()];
     }

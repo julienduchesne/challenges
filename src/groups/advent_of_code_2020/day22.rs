@@ -94,10 +94,6 @@ impl ChallengeConfig for Day22 {
         return "Day 22: Crab Combat";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Player 1's deck".to_owned(), "Player 2's deck".to_owned()];
     }

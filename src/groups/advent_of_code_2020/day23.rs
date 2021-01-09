@@ -61,10 +61,6 @@ impl ChallengeConfig for Day23 {
         return "Day 23: Crab Cups";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Cups".to_owned()];
     }

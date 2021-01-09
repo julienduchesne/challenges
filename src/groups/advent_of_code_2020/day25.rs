@@ -31,10 +31,6 @@ impl ChallengeConfig for Day25 {
         return "Day 25: Combo Breaker";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Card public key".to_owned(), "Door public key".to_owned()];
     }

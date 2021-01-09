@@ -48,10 +48,6 @@ impl ChallengeConfig for Day17 {
         return "Day 17: Conway Cubes";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Initial layer".to_owned()];
     }

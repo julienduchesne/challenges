@@ -74,10 +74,6 @@ impl ChallengeConfig for Day5 {
         return "Day 5: Binary Boarding";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Passes".to_owned()];
     }

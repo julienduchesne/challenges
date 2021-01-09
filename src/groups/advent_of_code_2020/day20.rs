@@ -117,10 +117,6 @@ impl ChallengeConfig for Day20 {
         return "Day 20: Jurassic Jigsaw";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Tiles".to_owned()];
     }

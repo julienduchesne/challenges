@@ -14,10 +14,6 @@ impl ChallengeConfig for Day6 {
         return "Day 6: Custom Customs";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Answers".to_owned()];
     }

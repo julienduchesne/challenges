@@ -15,10 +15,6 @@ impl ChallengeConfig for Day10 {
         return "Day 10: Adapter Array";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Adapters".to_owned()];
     }

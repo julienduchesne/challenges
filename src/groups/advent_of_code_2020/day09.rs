@@ -12,10 +12,6 @@ impl ChallengeConfig for Day9 {
         return "Day 9: Encoding Error";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Numbers".to_owned(), "Preamble length".to_owned()];
     }

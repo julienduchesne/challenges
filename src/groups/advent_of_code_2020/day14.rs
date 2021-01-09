@@ -14,10 +14,6 @@ impl ChallengeConfig for Day14 {
         return "Day 14: Docking Data";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Instructions".to_owned()];
     }

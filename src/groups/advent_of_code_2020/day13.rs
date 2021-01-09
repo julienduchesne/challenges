@@ -27,10 +27,6 @@ impl ChallengeConfig for Day13 {
         return "Day 13: Shuttle Search";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Earliest time".to_owned(), "Buses".to_owned()];
     }

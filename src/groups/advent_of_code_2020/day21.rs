@@ -11,10 +11,6 @@ impl ChallengeConfig for Day21 {
         return "Day 21: Allergen Assessment";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Foods".to_owned()];
     }

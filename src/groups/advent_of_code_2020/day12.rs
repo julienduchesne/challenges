@@ -69,10 +69,6 @@ impl ChallengeConfig for Day12 {
         return "Day 12: Rain Risk";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Moves".to_owned()];
     }

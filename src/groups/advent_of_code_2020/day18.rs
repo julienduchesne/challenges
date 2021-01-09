@@ -59,10 +59,6 @@ impl ChallengeConfig for Day18 {
         return "Day 18: Operation Order";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Homework".to_owned()];
     }

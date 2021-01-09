@@ -129,10 +129,6 @@ impl ChallengeConfig for Day8 {
         return "Day 8: Handheld Halting";
     }
 
-    fn description(&self) -> &str {
-        return "";
-    }
-
     fn variables(&self) -> Vec<String> {
         return vec!["Instructions".to_owned()];
     }
