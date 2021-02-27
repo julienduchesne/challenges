@@ -26,7 +26,10 @@ num-integer = "0.1.44"
 rand = "0.8.0"
 rayon = "1.5.0"
 regex = "1"
-serde_json = "1.0.59"
+rocket = "0.4.6"
+rocket_contrib = "0.4.6"
+rocket_cors = "0.5.1"
+serde = { version = "1.0", features = ["derive"] }
 thiserror = "1.0"
 
 [dependencies.cursive]
