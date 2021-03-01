@@ -7,7 +7,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import SpacingGrid from './SpacingGrid';
+import { SpacingGrid, GridItem } from './SpacingGrid';
 import { Component } from 'react';
 
 const API_URL = "http://localhost:8000/api"
@@ -43,14 +43,12 @@ export default function App() {
         </AppBar>
 
         <Switch>
+
+          <Route path="/groups/:groupName">
+            <Group />
+          </Route>
           <Route path="/">
             <Groups />
-          </Route>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/users/:userId">
-            <Users />
           </Route>
 
         </Switch>
@@ -60,7 +58,12 @@ export default function App() {
 }
 
 type GroupsState = {
-  groups: string[]
+  groups: GridItem[]
+}
+
+type GroupNameApiResult = {
+  key: string
+  display_name: string
 }
 
 class Groups extends Component<{}, GroupsState> {
@@ -73,24 +76,24 @@ class Groups extends Component<{}, GroupsState> {
   }
 
   componentDidMount() {
-    fetch(`${API_URL}/groups`).then(res => res.json()).then(data => { this.setState({ groups: data }) }).catch(console.log);
-
+    fetch(`${API_URL}/groups`)
+      .then(res => res.json())
+      .then((data: GroupNameApiResult[]) => {
+        let groups = data.map(i => ({ key: i.key, displayName: i.display_name }))
+        this.setState({ groups: groups })
+      }).catch(console.log);
   }
 
   render() {
-    return <SpacingGrid items={this.state.groups} />;
+    return <SpacingGrid baseUrl="groups" items={this.state.groups} />;
   }
 }
 
-function About() {
-  return <h2>About</h2>;
+interface GroupParams {
+  groupName: string
 }
 
-interface ParamTypes {
-  userId: string
-}
-
-function Users() {
-  let { userId } = useParams<ParamTypes>();
-  return <h2>Users: {userId}</h2>;
+function Group() {
+  let { groupName } = useParams<GroupParams>();
+  return <h2>{groupName}</h2>;
 }

@@ -28,26 +28,35 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-type GridProps = {
-    items: string[],
+export type GridItem = {
+    key: string,
+    displayName: string,
 }
 
-export default function SpacingGrid(props: GridProps) {
+type GridProps = {
+    baseUrl: string,
+    items: GridItem[],
+}
+
+export function SpacingGrid(props: GridProps) {
     const classes = useStyles();
 
     return (
         <Grid container className={classes.root} spacing={2}>
             <Grid item xs={12}>
                 <Grid container justify="center" spacing={2}>
-                    {props.items.map((value) => (
-                        <Grid key={value} item>
-                            <Link to={`/${value}`} className={classes.link} >
-                                <Paper className={classes.paper}>
-                                    <Typography variant="h5">{value}</Typography>
-                                </Paper>
-                            </Link>
-                        </Grid>
-                    ))}
+                    {props.items.map((value) => {
+                        let link = `/${props.baseUrl}/${value.key}`;
+                        return (
+                            <Grid key={value.key} item>
+                                <Link to={link} className={classes.link} >
+                                    <Paper className={classes.paper}>
+                                        <Typography variant="h5">{value.displayName}</Typography>
+                                    </Paper>
+                                </Link>
+                            </Grid>
+                        )
+                    })}
                 </Grid>
             </Grid>
         </Grid>
