@@ -1,7 +1,9 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 use std::collections::HashMap;
 
-use challenges::groups::group_manager::GroupManager;
+use anyhow::Result;
+use challenges::groups::{group_config::GroupConfig, group_manager::GroupManager};
+use itertools::Itertools;
 use rocket::http::Method;
 use rocket_contrib::{json::Json, serve::StaticFiles};
 use rocket_cors::{AllowedHeaders, AllowedOrigins};
@@ -11,50 +13,68 @@ use serde::Serialize;
 extern crate rocket;
 
 #[derive(Serialize, Debug)]
-pub struct GroupName {
+pub struct ItemName {
     key: String,
     display_name: String,
 }
 
-fn get_group_map() -> HashMap<String, String> {
-    let mut group_map = HashMap::new();
+fn get_groups() -> Vec<ItemName> {
     let manager = GroupManager::new();
-    for group_name in manager.get_group_names() {
-        group_map.insert(group_name.to_lowercase().replace(" ", "-"), group_name);
-    }
-    return group_map;
+    return manager
+        .get_group_names()
+        .iter()
+        .map(|g| ItemName {
+            key: g.to_lowercase().replace(" ", "-").clone(),
+            display_name: (*g).clone(),
+        })
+        .collect();
+}
+
+fn get_challenges(group: &Box<dyn GroupConfig>) -> Vec<ItemName> {
+    return group
+        .challenge_names()
+        .iter()
+        .map(|c| ItemName {
+            key: c.to_lowercase().replace(" ", "-").clone(),
+            display_name: (*c).clone(),
+        })
+        .collect();
 }
 
 #[get("/groups")]
-fn groups() -> Json<Vec<GroupName>> {
-    Json(
-        get_group_map()
-            .iter()
-            .map(|(k, v)| GroupName {
-                key: k.clone(),
-                display_name: v.clone(),
-            })
-            .collect(),
-    )
+fn groups() -> Json<Vec<ItemName>> {
+    Json(get_groups())
 }
 
 #[derive(Serialize, Debug)]
 pub struct Group {
     name: String,
     url: String,
-    challenges: Vec<String>,
+    challenges: Vec<ItemName>,
 }
 
-#[get("/groups/<key>")]
-fn group(key: String) -> Json<Group> {
-    let group_name = get_group_map().get(&key).unwrap().clone();
+#[get("/groups/<group_key>")]
+fn group(group_key: String) -> Option<Json<Group>> {
+    // Find the group name
+    let groups = get_groups();
+    let group_name = match groups.iter().find(|&g| g.key == group_key) {
+        Some(s) => s,
+        None => return None,
+    }
+    .clone();
+
+    // Get the group
     let manager = GroupManager::new();
-    let group = manager.get_group(&group_name).unwrap();
-    Json(Group {
+    let group = match manager.get_group(&group_name.display_name) {
+        Some(g) => g,
+        None => return None,
+    };
+
+    Some(Json(Group {
         name: group.name().to_owned(),
         url: group.url().to_owned(),
-        challenges: group.challenge_names(),
-    })
+        challenges: get_challenges(&group),
+    }))
 }
 
 #[derive(Serialize, Debug)]
@@ -64,30 +84,68 @@ pub struct Challenge {
     variables: Vec<String>,
 }
 
-#[get("/groups/<key>/challenges/<challenge>")]
-fn challenge(key: String, challenge: String) -> Json<Challenge> {
-    let group_name = get_group_map().get(&key).unwrap().clone();
+#[get("/groups/<group_key>/<challenge_key>")]
+fn challenge(group_key: String, challenge_key: String) -> Option<Json<Challenge>> {
+    // Find the group name
+    let groups = get_groups();
+    let group_name = match groups.iter().find(|&g| g.key == group_key) {
+        Some(s) => s,
+        None => return None,
+    }
+    .clone();
+
+    // Get the group
     let manager = GroupManager::new();
-    let group = manager.get_group(&group_name).unwrap();
-    let challenge = group.challenge(&challenge).unwrap();
-    Json(Challenge {
+    let group = match manager.get_group(&group_name.display_name) {
+        Some(g) => g,
+        None => return None,
+    };
+
+    // Get the challenge
+    let challenge = match group.challenge(&challenge_key) {
+        Some(c) => c,
+        None => return None,
+    };
+
+    Some(Json(Challenge {
         title: challenge.title().to_owned(),
         description: challenge.description().to_owned(),
         variables: challenge.variables(),
-    })
+    }))
 }
 
 #[post(
-    "/groups/<key>/challenges/<challenge>/solve",
+    "/groups/<group_key>/challenges/<challenge_key>/solve",
     format = "application/json",
     data = "<input>"
 )]
-fn solve(key: String, challenge: String, input: Json<HashMap<String, String>>) -> String {
-    let group_name = get_group_map().get(&key).unwrap().clone();
+fn solve(
+    group_key: String,
+    challenge_key: String,
+    input: Json<HashMap<String, String>>,
+) -> Option<Result<String>> {
+    // Find the group name
+    let groups = get_groups();
+    let group_name = match groups.iter().find(|&g| g.key == group_key) {
+        Some(s) => s,
+        None => return None,
+    }
+    .clone();
+
+    // Get the group
     let manager = GroupManager::new();
-    let group = manager.get_group(&group_name).unwrap();
-    let challenge = group.challenge(&challenge).unwrap();
-    challenge.solve_string(input.into_inner()).unwrap()
+    let group = match manager.get_group(&group_name.display_name) {
+        Some(g) => g,
+        None => return None,
+    };
+
+    // Get the challenge
+    let challenge = match group.challenge(&challenge_key) {
+        Some(c) => c,
+        None => return None,
+    };
+
+    Some(challenge.solve_string(input.into_inner()))
 }
 
 fn main() {

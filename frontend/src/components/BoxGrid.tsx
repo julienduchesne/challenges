@@ -38,7 +38,7 @@ type GridProps = {
     items: GridItem[],
 }
 
-export function SpacingGrid(props: GridProps) {
+export function BoxGrid(props: GridProps) {
     const classes = useStyles();
 
     return (

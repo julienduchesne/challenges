@@ -7,10 +7,9 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import { SpacingGrid, GridItem } from './SpacingGrid';
-import { Component } from 'react';
+import Groups from './views/Groups';
+import Group from './views/Group';
 
-const API_URL = "http://localhost:8000/api"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,57 +42,10 @@ export default function App() {
         </AppBar>
 
         <Switch>
-
-          <Route path="/groups/:groupName">
-            <Group />
-          </Route>
-          <Route path="/">
-            <Groups />
-          </Route>
-
+          <Route path="/groups/:groupKey" component={Group} />
+          <Route path="/" component={Groups} />
         </Switch>
       </div>
-    </Router>
+    </Router >
   );
-}
-
-type GroupsState = {
-  groups: GridItem[]
-}
-
-type GroupNameApiResult = {
-  key: string
-  display_name: string
-}
-
-class Groups extends Component<{}, GroupsState> {
-  constructor(props: {}) {
-    super(props);
-
-    this.state = {
-      groups: []
-    };
-  }
-
-  componentDidMount() {
-    fetch(`${API_URL}/groups`)
-      .then(res => res.json())
-      .then((data: GroupNameApiResult[]) => {
-        let groups = data.map(i => ({ key: i.key, displayName: i.display_name }))
-        this.setState({ groups: groups })
-      }).catch(console.log);
-  }
-
-  render() {
-    return <SpacingGrid baseUrl="groups" items={this.state.groups} />;
-  }
-}
-
-interface GroupParams {
-  groupName: string
-}
-
-function Group() {
-  let { groupName } = useParams<GroupParams>();
-  return <h2>{groupName}</h2>;
 }
