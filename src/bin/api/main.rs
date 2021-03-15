@@ -3,7 +3,7 @@ use std::collections::HashMap;
 
 use anyhow::Result;
 use challenges::groups::{group_config::GroupConfig, group_manager::GroupManager};
-use itertools::Itertools;
+use regex::Regex;
 use rocket::http::Method;
 use rocket_contrib::{json::Json, serve::StaticFiles};
 use rocket_cors::{AllowedHeaders, AllowedOrigins};
@@ -18,13 +18,21 @@ pub struct ItemName {
     display_name: String,
 }
 
+fn create_key(display_name: &str) -> String {
+    let re = Regex::new(r"[^A-Za-z0-9]").unwrap();
+    return re
+        .replace_all(display_name, "-")
+        .to_lowercase()
+        .replace("--", "-");
+}
+
 fn get_groups() -> Vec<ItemName> {
     let manager = GroupManager::new();
     return manager
         .get_group_names()
         .iter()
         .map(|g| ItemName {
-            key: g.to_lowercase().replace(" ", "-").clone(),
+            key: create_key(g),
             display_name: (*g).clone(),
         })
         .collect();
@@ -35,7 +43,7 @@ fn get_challenges(group: &Box<dyn GroupConfig>) -> Vec<ItemName> {
         .challenge_names()
         .iter()
         .map(|c| ItemName {
-            key: c.to_lowercase().replace(" ", "-").clone(),
+            key: create_key(c),
             display_name: (*c).clone(),
         })
         .collect();
