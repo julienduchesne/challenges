@@ -12,7 +12,7 @@ use serde::Serialize;
 #[macro_use]
 extern crate rocket;
 
-#[derive(Serialize, Debug)]
+#[derive(Clone, Serialize, Debug)]
 pub struct ItemName {
     key: String,
     display_name: String,
@@ -38,6 +38,14 @@ fn get_groups() -> Vec<ItemName> {
         .collect();
 }
 
+fn get_group_name(key: &str) -> Option<ItemName> {
+    let groups = get_groups();
+    return match groups.iter().find(|g| g.key == key) {
+        Some(s) => Some(s.clone()),
+        None => None,
+    };
+}
+
 fn get_challenges(group: &Box<dyn GroupConfig>) -> Vec<ItemName> {
     return group
         .challenge_names()
@@ -47,6 +55,14 @@ fn get_challenges(group: &Box<dyn GroupConfig>) -> Vec<ItemName> {
             display_name: (*c).clone(),
         })
         .collect();
+}
+
+fn get_challenge_name(group: &Box<dyn GroupConfig>, key: &str) -> Option<ItemName> {
+    let challenges = get_challenges(group);
+    return match challenges.iter().find(|g| g.key == key) {
+        Some(s) => Some(s.clone()),
+        None => None,
+    };
 }
 
 #[get("/groups")]
@@ -63,15 +79,11 @@ pub struct Group {
 
 #[get("/groups/<group_key>")]
 fn group(group_key: String) -> Option<Json<Group>> {
-    // Find the group name
-    let groups = get_groups();
-    let group_name = match groups.iter().find(|&g| g.key == group_key) {
-        Some(s) => s,
-        None => return None,
-    }
-    .clone();
-
     // Get the group
+    let group_name = match get_group_name(&group_key) {
+        Some(g) => g,
+        None => return None,
+    };
     let manager = GroupManager::new();
     let group = match manager.get_group(&group_name.display_name) {
         Some(g) => g,
@@ -94,15 +106,11 @@ pub struct Challenge {
 
 #[get("/groups/<group_key>/<challenge_key>")]
 fn challenge(group_key: String, challenge_key: String) -> Option<Json<Challenge>> {
-    // Find the group name
-    let groups = get_groups();
-    let group_name = match groups.iter().find(|&g| g.key == group_key) {
-        Some(s) => s,
-        None => return None,
-    }
-    .clone();
-
     // Get the group
+    let group_name = match get_group_name(&group_key) {
+        Some(g) => g,
+        None => return None,
+    };
     let manager = GroupManager::new();
     let group = match manager.get_group(&group_name.display_name) {
         Some(g) => g,
@@ -110,7 +118,11 @@ fn challenge(group_key: String, challenge_key: String) -> Option<Json<Challenge>
     };
 
     // Get the challenge
-    let challenge = match group.challenge(&challenge_key) {
+    let challenge_name = match get_challenge_name(group, &challenge_key) {
+        Some(g) => g,
+        None => return None,
+    };
+    let challenge = match group.challenge(&challenge_name.display_name) {
         Some(c) => c,
         None => return None,
     };
@@ -123,7 +135,7 @@ fn challenge(group_key: String, challenge_key: String) -> Option<Json<Challenge>
 }
 
 #[post(
-    "/groups/<group_key>/challenges/<challenge_key>/solve",
+    "/groups/<group_key>/<challenge_key>/solve",
     format = "application/json",
     data = "<input>"
 )]
@@ -132,15 +144,11 @@ fn solve(
     challenge_key: String,
     input: Json<HashMap<String, String>>,
 ) -> Option<Result<String>> {
-    // Find the group name
-    let groups = get_groups();
-    let group_name = match groups.iter().find(|&g| g.key == group_key) {
-        Some(s) => s,
-        None => return None,
-    }
-    .clone();
-
     // Get the group
+    let group_name = match get_group_name(&group_key) {
+        Some(g) => g,
+        None => return None,
+    };
     let manager = GroupManager::new();
     let group = match manager.get_group(&group_name.display_name) {
         Some(g) => g,
@@ -148,7 +156,11 @@ fn solve(
     };
 
     // Get the challenge
-    let challenge = match group.challenge(&challenge_key) {
+    let challenge_name = match get_challenge_name(group, &challenge_key) {
+        Some(g) => g,
+        None => return None,
+    };
+    let challenge = match group.challenge(&challenge_name.display_name) {
         Some(c) => c,
         None => return None,
     };
