@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Groups from './views/Groups';
 import Group from './views/Group';
+import Challenge from './views/Challenge';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -42,6 +43,7 @@ export default function App() {
         </AppBar>
 
         <Switch>
+          <Route path="/groups/:groupKey/:challengeKey" component={Challenge} />
           <Route path="/groups/:groupKey" component={Group} />
           <Route path="/" component={Groups} />
         </Switch>
