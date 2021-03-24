@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-function renderRoute(classes: ClassNameMap, content: JSX.Element) {
+function renderRoute(classes: ClassNameMap, content: JSX.Element, groupId?: string, challengeId?: string) {
   return <div className={classes.root}>
     <CssBaseline />
     <AppBar position="static">
@@ -50,17 +50,23 @@ function renderRoute(classes: ClassNameMap, content: JSX.Element) {
           <Link to="/" className={classes.crumbLink}>
             <Typography variant="h6" color="textPrimary" className={classes.crumb}>
               <HomeIcon className={classes.icon} />
-            Groups
-        </Typography>
+              Groups
+            </Typography>
           </Link>
-          <Link to="/getting-started/installation/" className={classes.crumbLink}>
-            <Typography variant="h6" color="textPrimary" className={classes.crumb}>
-              Challenge
-      </Typography>
-          </Link>
-          <Typography variant="h6" className={classes.crumb}>
-            Breadcrumb
-      </Typography>
+          {(groupId != undefined) &&
+            <Link to={`/groups/${groupId}`} className={classes.crumbLink}>
+              <Typography variant="h6" color="textPrimary" className={classes.crumb}>
+                {groupId}
+              </Typography>
+            </Link>
+          }
+          {(challengeId != undefined) &&
+            <Link to={`/groups/${groupId}/${challengeId}`} className={classes.crumbLink}>
+              <Typography variant="h6" className={classes.crumb}>
+                {challengeId}
+              </Typography>
+            </Link>
+          }
         </Breadcrumbs>
       </Toolbar>
     </AppBar>
@@ -78,12 +84,12 @@ export default function App() {
       <Switch>
         <Route path="/groups/:groupKey/:challengeKey" render={
           props => {
-            return renderRoute(classes, <Challenge {...props}></Challenge>);
+            return renderRoute(classes, <Challenge {...props}></Challenge>, props.match.params.groupKey, props.match.params.challengeKey);
           }
         } />
         <Route path="/groups/:groupKey" render={
           props => {
-            return renderRoute(classes, <Group {...props}></Group>);
+            return renderRoute(classes, <Group {...props}></Group>, props.match.params.groupKey);
           }
         } />
         <Route path="/" render={
