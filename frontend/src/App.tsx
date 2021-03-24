@@ -77,8 +77,6 @@ function renderRoute(classes: ClassNameMap, content: JSX.Element, groupId?: stri
 
 export default function App() {
   const classes = useStyles();
-  const toolbar = <Toolbar></Toolbar>
-
   return (
     <Router>
       <Switch>

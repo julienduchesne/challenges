@@ -1,8 +1,21 @@
-import { Typography } from "@material-ui/core";
+import { Container, createStyles, makeStyles, TextField, Theme, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React, { Component } from "react";
 import { RouteComponentProps, RouteProps, RouterProps } from "react-router";
 import { ChallengeInfo, getChallengeInfo } from "../api/Api";
 import { GridItem, BoxGrid } from "../components/BoxGrid";
+
+const styles = (theme: Theme) => createStyles({
+    title: {
+        textAlign: 'center',
+        margin: '20px',
+    },
+    description: {
+        textAlign: "center",
+    },
+    descriptionLine: {
+        margin: "0px"
+    },
+});
 
 type ChallengeState = {
     challengeKey: string,
@@ -10,8 +23,8 @@ type ChallengeState = {
     challengeInfo?: ChallengeInfo
 }
 
-export default class Group extends Component<RouteComponentProps, ChallengeState> {
-    constructor(props: RouteComponentProps) {
+class Group extends Component<RouteComponentProps & WithStyles<typeof styles>, ChallengeState> {
+    constructor(props: RouteComponentProps & WithStyles<typeof styles>) {
         super(props);
 
         const { match: { params } } = props;
@@ -34,9 +47,25 @@ export default class Group extends Component<RouteComponentProps, ChallengeState
     }
 
     render() {
-        return <div>
-            <Typography variant="h6">{this.state.challengeInfo?.title}</Typography>
-            <Typography variant="h6">{this.state.challengeInfo?.description}</Typography>
-        </div>;
+        const { classes } = this.props;
+        return <Container maxWidth="lg">
+            <Typography variant="h4" className={classes.title}>{this.state.challengeInfo?.title}</Typography>
+            <Typography variant="h6" className={classes.description}>
+                {this.state.challengeInfo?.description.split("\n").map((i, key) => {
+                    return <p className={classes.descriptionLine} key={key}>{i}</p>;
+                })}
+            </Typography>
+            {this.state.challengeInfo?.variables.map((key) => {
+                return <TextField
+                    label={key}
+                    multiline
+                    rows={4}
+                    defaultValue="Default Value"
+                    variant="outlined"
+                />
+            })}
+        </Container>;
     }
 }
+
+export default withStyles(styles)(Group)
