@@ -1,7 +1,7 @@
-import { Container, createStyles, makeStyles, TextField, Theme, Typography, WithStyles, withStyles } from "@material-ui/core";
+import { Button, Container, createStyles, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, makeStyles, TextField, Theme, Typography, WithStyles, withStyles } from "@material-ui/core";
 import React, { Component } from "react";
 import { RouteComponentProps, RouteProps, RouterProps } from "react-router";
-import { ChallengeInfo, getChallengeInfo } from "../api/Api";
+import { ChallengeInfo, getChallengeInfo, solveChallenge } from "../api/Api";
 import { GridItem, BoxGrid } from "../components/BoxGrid";
 
 const styles = (theme: Theme) => createStyles({
@@ -15,12 +15,19 @@ const styles = (theme: Theme) => createStyles({
     descriptionLine: {
         margin: "0px"
     },
+    input: {
+        display: 'block',
+        margin: '10px'
+    },
 });
+
 
 type ChallengeState = {
     challengeKey: string,
     groupKey: string,
-    challengeInfo?: ChallengeInfo
+    challengeInfo?: ChallengeInfo,
+    dialogOpen: boolean,
+    dialogContent?: string
 }
 
 class Group extends Component<RouteComponentProps & WithStyles<typeof styles>, ChallengeState> {
@@ -37,6 +44,8 @@ class Group extends Component<RouteComponentProps & WithStyles<typeof styles>, C
             groupKey: groupKey,
             challengeKey: challengeKey,
             challengeInfo: undefined,
+            dialogOpen: false,
+            dialogContent: undefined,
         };
     }
 
@@ -46,8 +55,31 @@ class Group extends Component<RouteComponentProps & WithStyles<typeof styles>, C
         })
     }
 
+
+
     render() {
         const { classes } = this.props;
+
+        let variables = this.state.challengeInfo?.variables || [];
+
+        const textFields = Object.assign({}, ...variables.map((key) => (
+            {
+                [key]: <TextField
+                    ref={React.createRef()}
+                    className={classes.input}
+                    label={key}
+                    multiline
+                    fullWidth
+                    rows={12}
+                    defaultValue=""
+                    variant="outlined"
+                />
+            }
+        )));
+
+        const solveProblem = () => {
+            this.setState({ dialogOpen: true, dialogContent: "test3" })
+        }
         return <Container maxWidth="lg">
             <Typography variant="h4" className={classes.title}>{this.state.challengeInfo?.title}</Typography>
             <Typography variant="h6" className={classes.description}>
@@ -55,16 +87,30 @@ class Group extends Component<RouteComponentProps & WithStyles<typeof styles>, C
                     return <p className={classes.descriptionLine} key={key}>{i}</p>;
                 })}
             </Typography>
-            {this.state.challengeInfo?.variables.map((key) => {
-                return <TextField
-                    label={key}
-                    multiline
-                    rows={4}
-                    defaultValue="Default Value"
-                    variant="outlined"
-                />
-            })}
-        </Container>;
+            {Object.values(textFields)}
+
+            <Button className={classes.input} onClick={solveProblem} variant="contained" color="primary">
+                Solve
+            </Button>
+            <Dialog
+                open={this.state.dialogOpen}
+                onClose={() => this.setState({ dialogOpen: false })}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Answer"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {this.state.dialogContent}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => this.setState({ dialogOpen: false })} color="primary" autoFocus>
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </Container >;
     }
 }
 

@@ -39,3 +39,13 @@ export async function getChallengeInfo(groupKey: string, challengeKey: string): 
         .then(res => res.json())
         .catch(console.log);
 }
+
+export async function solveChallenge(groupKey: string, challengeKey: string, data: object): Promise<ChallengeInfo> {
+    return await fetch(`${API_URL}/groups/${groupKey}/${challengeKey}`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+
+    })
+        .then(res => res.json())
+        .catch(console.log);
+}
