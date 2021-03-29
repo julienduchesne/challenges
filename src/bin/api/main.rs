@@ -165,7 +165,9 @@ fn solve(
         None => return None,
     };
 
-    Some(challenge.solve_string(input.into_inner()))
+    let solved = challenge.solve_string(input.into_inner());
+
+    Some(solved)
 }
 
 fn main() {
@@ -174,8 +176,11 @@ fn main() {
     // You can also deserialize this
     let cors = rocket_cors::CorsOptions {
         allowed_origins,
-        allowed_methods: vec![Method::Get].into_iter().map(From::from).collect(),
-        allowed_headers: AllowedHeaders::some(&["Authorization", "Accept"]),
+        allowed_methods: vec![Method::Get, Method::Post]
+            .into_iter()
+            .map(From::from)
+            .collect(),
+        allowed_headers: AllowedHeaders::some(&["Authorization", "Accept", "Content-Type"]),
         allow_credentials: true,
         ..Default::default()
     }
