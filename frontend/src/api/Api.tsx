@@ -25,7 +25,6 @@ type GroupInfo = {
 export type ChallengeInfo = {
     title: string
     description: string
-    variables: string[]
 }
 
 export async function getGroupInfo(key: string): Promise<GroupInfo> {
@@ -40,13 +39,10 @@ export async function getChallengeInfo(groupKey: string, challengeKey: string): 
         .catch(console.log);
 }
 
-export async function solveChallenge(groupKey: string, challengeKey: string, data: object): Promise<string> {
+export async function solveChallenge(groupKey: string, challengeKey: string, data: string): Promise<string> {
     return await fetch(`${API_URL}/groups/${groupKey}/${challengeKey}/solve`, {
-        headers: {
-            'Content-Type': 'application/json'
-        },
         method: 'POST',
-        body: JSON.stringify(data),
+        body: data,
     })
         .then(res => res.text());
 }

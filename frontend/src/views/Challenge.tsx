@@ -28,7 +28,7 @@ type ChallengeState = {
     challengeInfo?: ChallengeInfo,
     dialogOpen: boolean,
     dialogContent?: string,
-    textFieldValues: { [k: string]: any },
+    textFieldValue: string,
 }
 
 class Group extends Component<RouteComponentProps & WithStyles<typeof styles>, ChallengeState> {
@@ -47,7 +47,7 @@ class Group extends Component<RouteComponentProps & WithStyles<typeof styles>, C
             challengeInfo: undefined,
             dialogOpen: false,
             dialogContent: undefined,
-            textFieldValues: {},
+            textFieldValue: "",
         };
     }
 
@@ -61,7 +61,7 @@ class Group extends Component<RouteComponentProps & WithStyles<typeof styles>, C
 
     render() {
         const solveProblem = () => {
-            solveChallenge(this.state.groupKey, this.state.challengeKey, this.state.textFieldValues).then(data => {
+            solveChallenge(this.state.groupKey, this.state.challengeKey, this.state.textFieldValue).then(data => {
                 this.setState({ dialogOpen: true, dialogContent: data });
             });
         }
@@ -74,22 +74,18 @@ class Group extends Component<RouteComponentProps & WithStyles<typeof styles>, C
                     return <p className={classes.descriptionLine} key={key}>{i}</p>;
                 })}
             </Typography>
-            {this.state.challengeInfo?.variables.map((key) => {
-                return <TextField
-                    className={classes.input}
-                    label={key}
-                    multiline
-                    fullWidth
-                    rows={12}
-                    variant="outlined"
-                    value={this.state.textFieldValues[key]}
-                    onChange={(e) => {
-                        let existingValues = this.state.textFieldValues;
-                        existingValues[key] = e.target.value;
-                        this.setState({ textFieldValues: existingValues });
-                    }}
-                />
-            })}
+            <TextField
+                className={classes.input}
+                label="input"
+                multiline
+                fullWidth
+                rows={20}
+                variant="outlined"
+                value={this.state.textFieldValue}
+                onChange={(e) => {
+                    this.setState({ textFieldValue: e.target.value });
+                }}
+            />
 
 
 

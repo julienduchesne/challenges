@@ -96,7 +96,10 @@ impl ChallengeConfig for Day22 {
     }
 
     fn solve(&self, input: &str) -> Result<String> {
-        let groups = input.split_sections();
+        let groups = input
+            .replace("Player 1:\n", "")
+            .replace("Player 2:\n", "")
+            .split_sections();
         if groups.len() != 2 {
             return Err(ChallengeError::new("Expected 2 groups").into());
         }
@@ -121,12 +124,14 @@ mod tests {
         input,
         expected,
         case(
-            "9
+            "Player 1:
+            9
             2
             6
             3
             1
-
+            
+            Player 2:
             5
             8
             4
