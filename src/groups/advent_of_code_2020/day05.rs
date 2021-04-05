@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use anyhow::Result;
 use itertools::Itertools;
 
@@ -74,12 +72,8 @@ impl ChallengeConfig for Day5 {
         return "Day 5: Binary Boarding";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Passes".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let passes: Vec<BoardingPass> = variables["Passes"]
+    fn solve(&self, input: &str) -> Result<String> {
+        let passes: Vec<BoardingPass> = input
             .replace("  ", "")
             .split_whitespace()
             .map(|x| x.trim())
@@ -115,7 +109,6 @@ impl ChallengeConfig for Day5 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -149,6 +142,6 @@ mod tests {
     )]
     fn solve(passes: &str, expected: &str) {
         let day = Day5 {};
-        assert_eq!(day.solve(hashmap! {"Passes" => passes}).unwrap(), expected);
+        assert_eq!(day.solve(passes).unwrap(), expected);
     }
 }

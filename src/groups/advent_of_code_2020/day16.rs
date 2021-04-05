@@ -1,9 +1,11 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 use anyhow::Result;
 
-use crate::groups::challenge_config::{ChallengeConfig, ChallengeError};
-
+use crate::{
+    groups::challenge_config::{ChallengeConfig, ChallengeError},
+    utils::InputUtils,
+};
 pub struct Day16 {}
 struct Rule {
     name: String,
@@ -53,27 +55,27 @@ impl ChallengeConfig for Day16 {
         return "Day 16: Ticket Translation";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec![
-            "Rules".to_owned(),
-            "Your ticket".to_owned(),
-            "Other tickets".to_owned(),
-        ];
-    }
+    fn solve(&self, input: &str) -> Result<String> {
+        let groups = input
+            .replace("nearby tickets:\n", "")
+            .replace("your ticket:\n", "")
+            .split_sections();
+        if groups.len() != 3 {
+            return Err(ChallengeError::new("Expected 3 groups").into());
+        }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let rule_lines = variables["Rules"].split("\n");
+        let rule_lines = groups[0].split("\n");
         let line_count = rule_lines.clone().count();
         let mut rules: Vec<Rule> = rule_lines
             .map(|r| Rule::parse(r.trim(), line_count))
             .collect::<Result<_, _>>()?;
 
-        let own_ticket: Vec<usize> = variables["Your ticket"]
+        let own_ticket: Vec<usize> = groups[1]
             .split(",")
             .map(|x| x.trim().parse::<usize>())
             .collect::<Result<_, _>>()?;
 
-        let mut other_tickets: Vec<Vec<usize>> = variables["Other tickets"]
+        let mut other_tickets: Vec<Vec<usize>> = groups[2]
             .split_whitespace()
             .map(|x| x.split(",").map(|x| x.trim().parse::<usize>()).collect())
             .collect::<Result<_, _>>()?;
@@ -144,36 +146,31 @@ impl ChallengeConfig for Day16 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
 
     #[rstest(
-        rules,
-        your_ticket,
-        other_tickets,
+        input,
         expected,
         case(
             "departure class: 1-3 or 5-7
-        departure row: 6-11 or 33-44
-        seat: 13-40 or 45-50",
-            "7,1,14",
-            "7,3,47
-        40,4,50
-        55,2,20
-        38,6,12",
+            departure row: 6-11 or 33-44
+            seat: 13-40 or 45-50
+
+            your ticket:
+            7,1,14
+
+            nearby tickets:
+            7,3,47
+            40,4,50
+            55,2,20
+            38,6,12",
             "Part 1: 71\nPart 2: 7"
         )
     )]
-    fn solve(rules: &str, your_ticket: &str, other_tickets: &str, expected: &str) {
+    fn solve(input: &str, expected: &str) {
         let day = Day16 {};
-        assert_eq!(
-            day.solve(
-                hashmap! {"Rules" => rules, "Your ticket" => your_ticket, "Other tickets" => other_tickets,}
-            )
-            .unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(input).unwrap(), expected);
     }
 }

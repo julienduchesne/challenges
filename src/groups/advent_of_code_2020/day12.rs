@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use anyhow::Result;
 
 use crate::groups::challenge_config::ChallengeConfig;
@@ -69,12 +67,8 @@ impl ChallengeConfig for Day12 {
         return "Day 12: Rain Risk";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Moves".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let moves: Vec<(char, isize)> = variables["Moves"]
+    fn solve(&self, input: &str) -> Result<String> {
+        let moves: Vec<(char, isize)> = input
             .split_whitespace()
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -95,7 +89,6 @@ impl ChallengeConfig for Day12 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -114,6 +107,6 @@ mod tests {
     )]
     fn solve(moves: &str, expected: &str) {
         let day = Day12 {};
-        assert_eq!(day.solve(hashmap! {"Moves" => moves}).unwrap(), expected);
+        assert_eq!(day.solve(moves).unwrap(), expected);
     }
 }

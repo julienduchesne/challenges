@@ -14,12 +14,8 @@ impl ChallengeConfig for Day14 {
         return "Day 14: Docking Data";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Instructions".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let instructions: Vec<&str> = variables["Instructions"]
+    fn solve(&self, input: &str) -> Result<String> {
+        let instructions: Vec<&str> = input
             .split("\n")
             .map(str::trim)
             .filter(|x| !x.is_empty())
@@ -88,7 +84,6 @@ impl ChallengeConfig for Day14 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -113,10 +108,6 @@ mod tests {
     )]
     fn solve(instructions: &str, expected: &str) {
         let day = Day14 {};
-        assert_eq!(
-            day.solve(hashmap! {"Instructions" => instructions})
-                .unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(instructions).unwrap(), expected);
     }
 }

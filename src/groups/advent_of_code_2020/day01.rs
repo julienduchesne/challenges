@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use anyhow::Result;
 
 use crate::groups::challenge_config::{ChallengeConfig, ChallengeError};
@@ -48,13 +46,8 @@ impl ChallengeConfig for Day1 {
 Part 2: What is the product of the three entries that sum to 2020?";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Report".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let report: &str = variables["Report"];
-        let numbers: Vec<isize> = report
+    fn solve(&self, input: &str) -> Result<String> {
+        let numbers: Vec<isize> = input
             .split("\n")
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -69,7 +62,6 @@ Part 2: What is the product of the three entries that sum to 2020?";
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -106,16 +98,14 @@ mod tests {
     )]
     fn solve(input: &str, expected: &str) {
         let day1 = Day1 {};
-        assert_eq!(day1.solve(hashmap! {"Report" => input}).unwrap(), expected);
+        assert_eq!(day1.solve(input).unwrap(), expected);
     }
 
     #[test]
     fn parsing_error() {
         let day1 = Day1 {};
         assert_eq!(
-            day1.solve(hashmap! {"Report" => "abc"})
-                .unwrap_err()
-                .to_string(),
+            day1.solve("abc").unwrap_err().to_string(),
             "invalid digit found in string"
         );
     }

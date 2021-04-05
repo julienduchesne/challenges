@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use anyhow::Result;
 use ndarray::{Array, Array2, Axis};
 
@@ -8,15 +6,15 @@ use crate::groups::challenge_config::ChallengeConfig;
 pub struct Day3 {}
 
 impl Day3 {
-    fn solve_path(&self, array: Array2<usize>, path: Vec<isize>) -> usize {
+    fn solve_path(&self, array: Array2<usize>, path: (i32, i32)) -> usize {
         let mut trees_hit = 0;
         let mut current_row = 0;
         let mut current_col = 0;
-        let row_count = array.len_of(Axis(0)) as isize;
-        let col_count = array.len_of(Axis(1)) as isize;
+        let row_count = array.len_of(Axis(0)) as i32;
+        let col_count = array.len_of(Axis(1)) as i32;
         while current_row < row_count - 1 {
-            current_row -= path[0];
-            current_col = (current_col + path[1]) % col_count; // Possible to overflow
+            current_row -= path.0;
+            current_col = (current_col + path.1) % col_count; // Possible to overflow
             if array.get((current_row as usize, current_col as usize)) == Some(&1) {
                 trees_hit += 1;
             }
@@ -31,12 +29,8 @@ impl ChallengeConfig for Day3 {
         return "Day 3: Toboggan Trajectory";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Map".to_owned(), "Paths".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let lines: Vec<&str> = variables["Map"]
+    fn solve(&self, input: &str) -> Result<String> {
+        let lines: Vec<&str> = input
             .split("\n")
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -53,36 +47,45 @@ impl ChallengeConfig for Day3 {
                     .collect::<Vec<usize>>(),
             ));
         }
-        let path_vecs: Vec<Vec<isize>> = variables["Paths"]
-            .split(";")
-            .map(|x| x.split(",").map(|x| x.parse::<isize>().unwrap()).collect())
-            .collect();
 
-        let mut total = 1;
+        let part_one_vecs = vec![(-1, 3)];
+        let part_two_vecs = vec![(-1, 1), (-1, 3), (-1, 5), (-1, 7), (-2, 1)];
+
         let mut result = "".to_string();
-        for (i, path_vec) in path_vecs.iter().enumerate() {
-            let line_result = self.solve_path(array.clone(), path_vec.clone());
-            total = total * line_result;
-            result.push_str(format!("Path {}: {}\n", i, line_result).as_str());
+        for (index, vecs) in vec![part_one_vecs, part_two_vecs].iter().enumerate() {
+            let mut line_results = vec![];
+            for path_vec in vecs.iter() {
+                let line_result = self.solve_path(array.clone(), path_vec.clone());
+                line_results.push(line_result);
+            }
+            result.push_str(
+                format!(
+                    "Part {}: {} = {}\n",
+                    index + 1,
+                    line_results
+                        .iter()
+                        .map(usize::to_string)
+                        .collect::<Vec<String>>()
+                        .join(" * "),
+                    line_results.iter().product::<usize>()
+                )
+                .as_str(),
+            );
         }
-        result.push_str(format!("Total: {}", total).as_str());
 
-        return Ok(result);
+        return Ok(String::from(result.trim_end()));
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
 
     #[rstest(
         map,
-        path,
         expected,
-        // Single path (Part 1)
         case(
             "..##.......
             #...#...#..
@@ -95,31 +98,11 @@ mod tests {
             #.##...#...
             #...##....#
             .#..#...#.#",
-            "-1,3",
-            "Path 0: 7\nTotal: 7"
-        ),
-        // Multiple paths (Part 2)
-        case(
-            "..##.......
-            #...#...#..
-            .#....#..#.
-            ..#.#...#.#
-            .#...##..#.
-            ..#.##.....
-            .#.#.#....#
-            .#........#
-            #.##...#...
-            #...##....#
-            .#..#...#.#",
-            "-1,1;-1,3;-1,5;-1,7;-2,1",
-            "Path 0: 2\nPath 1: 7\nPath 2: 3\nPath 3: 4\nPath 4: 2\nTotal: 336"
+            "Part 1: 7 = 7\nPart 2: 2 * 7 * 3 * 4 * 2 = 336"
         )
     )]
-    fn solve(map: &str, path: &str, expected: &str) {
+    fn solve(map: &str, expected: &str) {
         let day = Day3 {};
-        assert_eq!(
-            day.solve(hashmap! {"Map" => map, "Paths" => path}).unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(map).unwrap(), expected);
     }
 }

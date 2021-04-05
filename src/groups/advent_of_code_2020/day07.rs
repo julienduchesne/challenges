@@ -102,12 +102,8 @@ impl ChallengeConfig for Day7 {
         return "Day 7: Handy Haversacks";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Rules".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let rules = self.parse_rules(variables["Rules"])?;
+    fn solve(&self, input: &str) -> Result<String> {
+        let rules = self.parse_rules(input)?;
         let part_one = self.solve_part_one(rules.clone(), "shiny gold bag");
         let part_two = self.solve_part_two(rules.clone(), "shiny gold bag");
 
@@ -117,7 +113,6 @@ impl ChallengeConfig for Day7 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -150,6 +145,6 @@ mod tests {
     )]
     fn solve(rules: &str, expected: &str) {
         let day = Day7 {};
-        assert_eq!(day.solve(hashmap! {"Rules" => rules}).unwrap(), expected);
+        assert_eq!(day.solve(rules).unwrap(), expected);
     }
 }

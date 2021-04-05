@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use anyhow::Result;
 
 use crate::groups::challenge_config::{ChallengeConfig, ChallengeError};
@@ -59,12 +57,8 @@ impl ChallengeConfig for Day18 {
         return "Day 18: Operation Order";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Homework".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let lines: Vec<&str> = variables["Homework"]
+    fn solve(&self, input: &str) -> Result<String> {
+        let lines: Vec<&str> = input
             .split("\n")
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -83,7 +77,6 @@ impl ChallengeConfig for Day18 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -105,9 +98,6 @@ mod tests {
     )]
     fn solve(homework: &str, expected: &str) {
         let day = Day18 {};
-        assert_eq!(
-            day.solve(hashmap! {"Homework" => homework}).unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(homework).unwrap(), expected);
     }
 }

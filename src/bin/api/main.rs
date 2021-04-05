@@ -1,5 +1,4 @@
 #![feature(proc_macro_hygiene, decl_macro)]
-use std::collections::HashMap;
 
 use anyhow::Result;
 use challenges::groups::{group_config::GroupConfig, group_manager::GroupManager};
@@ -101,7 +100,6 @@ fn group(group_key: String) -> Option<Json<Group>> {
 pub struct Challenge {
     title: String,
     description: String,
-    variables: Vec<String>,
 }
 
 #[get("/groups/<group_key>/<challenge_key>")]
@@ -130,20 +128,15 @@ fn challenge(group_key: String, challenge_key: String) -> Option<Json<Challenge>
     Some(Json(Challenge {
         title: challenge.title().to_owned(),
         description: challenge.description().to_owned(),
-        variables: challenge.variables(),
     }))
 }
 
 #[post(
     "/groups/<group_key>/<challenge_key>/solve",
-    format = "application/json",
+    format = "text/plain",
     data = "<input>"
 )]
-fn solve(
-    group_key: String,
-    challenge_key: String,
-    input: Json<HashMap<String, String>>,
-) -> Option<Result<String>> {
+fn solve(group_key: String, challenge_key: String, input: String) -> Option<Result<String>> {
     // Get the group
     let group_name = match get_group_name(&group_key) {
         Some(g) => g,
@@ -165,7 +158,7 @@ fn solve(
         None => return None,
     };
 
-    let solved = challenge.solve_string(input.into_inner());
+    let solved = challenge.solve(&input);
 
     Some(solved)
 }

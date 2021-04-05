@@ -1,10 +1,8 @@
-use std::collections::HashMap;
-
 use anyhow::Result;
 use modinverse::egcd;
 use num_integer::Integer;
 
-use crate::groups::challenge_config::ChallengeConfig;
+use crate::groups::challenge_config::{ChallengeConfig, ChallengeError};
 
 pub struct Day13 {}
 
@@ -27,13 +25,12 @@ impl ChallengeConfig for Day13 {
         return "Day 13: Shuttle Search";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Earliest time".to_owned(), "Buses".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let earliest_time = variables["Earliest time"].parse::<i128>()?;
-        let buses: Vec<i128> = variables["Buses"]
+    fn solve(&self, input: &str) -> Result<String> {
+        let (first, second) = input
+            .split_once("\n")
+            .ok_or(ChallengeError::new("Unable to split into two parts"))?;
+        let earliest_time = first.parse::<i128>()?;
+        let buses: Vec<i128> = second
             .split(",")
             .map(str::trim)
             .filter(|x| !x.is_empty())
@@ -77,31 +74,25 @@ impl ChallengeConfig for Day13 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
 
     #[rstest(
-        earliest_time,
-        buses,
+        input,
         expected,
-        case("0", "9,x,x,15", "Part 1: 81\nPart 2: 27"),
-        case("0", "9,x,x,15,x,x,x,14", "Part 1: 81\nPart 2: 567"),
-        case("0", "17,x,13", "Part 1: 169\nPart 2: 102"),
-        case("0", "17,x,13,19", "Part 1: 169\nPart 2: 3417"),
-        case("0", "67,7,59,61", "Part 1: 49\nPart 2: 754018"),
-        case("0", "67,x,7,59,61", "Part 1: 49\nPart 2: 779210"),
-        case("0", "67,7,x,59,61", "Part 1: 49\nPart 2: 1261476"),
-        case("0", "1789,37,47,1889", "Part 1: 1369\nPart 2: 1202161486"),
-        case("939", "7,13,x,x,59,x,31,19", "Part 1: 295\nPart 2: 1068781")
+        case("0\n9,x,x,15", "Part 1: 81\nPart 2: 27"),
+        case("0\n9,x,x,15,x,x,x,14", "Part 1: 81\nPart 2: 567"),
+        case("0\n17,x,13", "Part 1: 169\nPart 2: 102"),
+        case("0\n17,x,13,19", "Part 1: 169\nPart 2: 3417"),
+        case("0\n67,7,59,61", "Part 1: 49\nPart 2: 754018"),
+        case("0\n67,x,7,59,61", "Part 1: 49\nPart 2: 779210"),
+        case("0\n67,7,x,59,61", "Part 1: 49\nPart 2: 1261476"),
+        case("0\n1789,37,47,1889", "Part 1: 1369\nPart 2: 1202161486"),
+        case("939\n7,13,x,x,59,x,31,19", "Part 1: 295\nPart 2: 1068781")
     )]
-    fn solve(earliest_time: &str, buses: &str, expected: &str) {
+    fn solve(input: &str, expected: &str) {
         let day = Day13 {};
-        assert_eq!(
-            day.solve(hashmap! {"Earliest time" => earliest_time, "Buses" => buses})
-                .unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(input).unwrap(), expected);
     }
 }

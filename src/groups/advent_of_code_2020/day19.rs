@@ -6,7 +6,10 @@ use std::{
 use anyhow::Result;
 use lru::LruCache;
 
-use crate::groups::challenge_config::ChallengeConfig;
+use crate::{
+    groups::challenge_config::{ChallengeConfig, ChallengeError},
+    utils::InputUtils,
+};
 
 pub struct Day19 {}
 struct Rules {
@@ -121,13 +124,14 @@ impl ChallengeConfig for Day19 {
         return "Day 19: Monster Messages";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Rules".to_owned(), "Messages".to_owned()];
-    }
+    fn solve(&self, input: &str) -> Result<String> {
+        let groups = input.split_sections();
+        if groups.len() != 2 {
+            return Err(ChallengeError::new("Expected 2 groups").into());
+        }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let mut rules = Rules::new(variables["Rules"])?;
-        let messages: Vec<&str> = variables["Messages"]
+        let mut rules = Rules::new(groups[0].as_str())?;
+        let messages: Vec<&str> = groups[1]
             .split_whitespace()
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -147,14 +151,12 @@ impl ChallengeConfig for Day19 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
 
     #[rstest(
-        rules,
-        messages,
+        input,
         expected,
         case(
             "42: 9 14 | 10 1
@@ -187,8 +189,9 @@ mod tests {
             26: 14 22 | 1 20
             18: 15 15
             7: 14 5 | 1 21
-            24: 14 1",
-            "abbbbbabbbaaaababbaabbbbabababbbabbbbbbabaaaa
+            24: 14 1
+
+            abbbbbabbbaaaababbaabbbbabababbbabbbbbbabaaaa
             bbabbbbaabaabba
             babbbbaabbbbbabbbbbbaabaaabaaa
             aaabbbbbbaaaabaababaabababbabaaabbababababaaa
@@ -206,12 +209,8 @@ mod tests {
             "Part 1: 3\nPart 2: 12"
         )
     )]
-    fn solve(rules: &str, messages: &str, expected: &str) {
+    fn solve(input: &str, expected: &str) {
         let day = Day19 {};
-        assert_eq!(
-            day.solve(hashmap! {"Rules" => rules, "Messages" => messages})
-                .unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(input).unwrap(), expected);
     }
 }

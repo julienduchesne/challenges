@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use anyhow::Result;
 use regex::Regex;
 
@@ -65,13 +63,8 @@ impl ChallengeConfig for Day2 {
         return "Day 2: Password Philosophy";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Passwords".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let report: &str = variables["Passwords"];
-        let lines: Vec<Line> = report
+    fn solve(&self, input: &str) -> Result<String> {
+        let lines: Vec<Line> = input
             .split("\n")
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -86,7 +79,6 @@ impl ChallengeConfig for Day2 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -103,9 +95,6 @@ mod tests {
     )]
     fn solve(input: &str, expected: &str) {
         let day = Day2 {};
-        assert_eq!(
-            day.solve(hashmap! {"Passwords" => input}).unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(input).unwrap(), expected);
     }
 }

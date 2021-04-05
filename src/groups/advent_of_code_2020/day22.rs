@@ -1,8 +1,9 @@
-use std::collections::HashMap;
-
 use anyhow::Result;
 
-use crate::groups::challenge_config::ChallengeConfig;
+use crate::{
+    groups::challenge_config::{ChallengeConfig, ChallengeError},
+    utils::InputUtils,
+};
 
 pub struct Day22 {}
 
@@ -94,13 +95,14 @@ impl ChallengeConfig for Day22 {
         return "Day 22: Crab Combat";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Player 1's deck".to_owned(), "Player 2's deck".to_owned()];
-    }
+    fn solve(&self, input: &str) -> Result<String> {
+        let groups = input.split_sections();
+        if groups.len() != 2 {
+            return Err(ChallengeError::new("Expected 2 groups").into());
+        }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let deck1 = Self::parse_deck(variables["Player 1's deck"])?;
-        let deck2 = Self::parse_deck(variables["Player 2's deck"])?;
+        let deck1 = Self::parse_deck(groups[0].as_str())?;
+        let deck2 = Self::parse_deck(groups[1].as_str())?;
 
         let part_one = Self::solve_regular(deck1.clone(), deck2.clone());
         let part_two = Self::solve_recursive(deck1.clone(), deck2.clone());
@@ -111,22 +113,21 @@ impl ChallengeConfig for Day22 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
 
     #[rstest(
-        one,
-        two,
+        input,
         expected,
         case(
             "9
             2
             6
             3
-            1",
-            "5
+            1
+
+            5
             8
             4
             7
@@ -134,12 +135,8 @@ mod tests {
             "Part 1: 306\nPart 2: 291"
         )
     )]
-    fn solve(one: &str, two: &str, expected: &str) {
+    fn solve(input: &str, expected: &str) {
         let day = Day22 {};
-        assert_eq!(
-            day.solve(hashmap! {"Player 1's deck" => one, "Player 2's deck" => two})
-                .unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(input).unwrap(), expected);
     }
 }

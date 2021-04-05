@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use anyhow::Result;
 
 use crate::groups::challenge_config::{ChallengeConfig, ChallengeError};
@@ -31,13 +29,18 @@ impl ChallengeConfig for Day25 {
         return "Day 25: Combo Breaker";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Card public key".to_owned(), "Door public key".to_owned()];
-    }
+    fn solve(&self, input: &str) -> Result<String> {
+        let lines: Vec<&str> = input
+            .split("\n")
+            .map(|x| x.trim())
+            .filter(|x| !x.is_empty())
+            .collect();
+        if lines.len() != 2 {
+            return Err(ChallengeError::new("Expected 2 lines").into());
+        }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let card_public_key = variables["Card public key"].parse::<u64>()?;
-        let door_public_key = variables["Door public key"].parse::<u64>()?;
+        let card_public_key = lines[0].parse::<u64>()?;
+        let door_public_key = lines[1].parse::<u64>()?;
         let card_loop_size = Self::find_loop_size(card_public_key)?;
         let mut result = 1;
         for _ in 0..card_loop_size {
@@ -50,26 +53,26 @@ impl ChallengeConfig for Day25 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
 
     #[rstest(
-        card_public_key,
-        door_public_key,
+        input,
         expected,
-        case("5764801", "17807724", "Result: 14897079"),
-        case("14205034", "18047856", "Result: 297257")
+        case(
+            "5764801
+            17807724",
+            "Result: 14897079"
+        ),
+        case(
+            "14205034
+            18047856",
+            "Result: 297257"
+        )
     )]
-    fn solve(card_public_key: &str, door_public_key: &str, expected: &str) {
+    fn solve(input: &str, expected: &str) {
         let day = Day25 {};
-        assert_eq!(
-            day.solve(
-                hashmap! {"Card public key" => card_public_key, "Door public key" => door_public_key }
-            )
-            .unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(input).unwrap(), expected);
     }
 }

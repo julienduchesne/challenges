@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use anyhow::Result;
 use ndarray::{Array, Array2, Axis};
 
@@ -72,12 +70,8 @@ impl ChallengeConfig for Day11 {
         return "Day 11: Seating System";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Seats".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let lines: Vec<&str> = variables["Seats"]
+    fn solve(&self, input: &str) -> Result<String> {
+        let lines: Vec<&str> = input
             .split("\n")
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -148,7 +142,6 @@ impl ChallengeConfig for Day11 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -172,6 +165,6 @@ mod tests {
     )]
     fn solve(seats: &str, expected: &str) {
         let day = Day11 {};
-        assert_eq!(day.solve(hashmap! {"Seats" => seats}).unwrap(), expected);
+        assert_eq!(day.solve(seats).unwrap(), expected);
     }
 }

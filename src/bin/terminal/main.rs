@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use challenges::groups::group_manager::GroupManager;
 use cursive::{
     align::HAlign,
@@ -22,7 +20,6 @@ struct UserData {
     group_manager: GroupManager,
     selected_group: String,
     selected_challenge: Option<String>,
-    fields: Option<Vec<String>>,
 }
 
 impl UserData {
@@ -51,9 +48,7 @@ fn update_view(s: &mut Cursive) {
         )
         .unwrap()
         .clone();
-    user_data.fields = Some(selected_challenge.variables().clone());
     let description = selected_challenge.description().to_owned();
-    let variables = selected_challenge.variables().clone();
 
     if group_changed {
         s.call_on_name("challenge_select", |view: &mut SelectView| {
@@ -71,40 +66,17 @@ fn update_view(s: &mut Cursive) {
         view.set_content(description);
     });
 
-    s.call_on_name("content", |view: &mut LinearLayout| {
-        while view.len() > 1 {
-            view.remove_child(1);
-        }
-        for input in variables {
-            let name = format!("input-{}", input);
-            view.insert_child(
-                view.len(),
-                Panel::new(
-                    LinearLayout::vertical().child(TextView::new(input)).child(
-                        TextArea::new()
-                            .with_name(name)
-                            .resized(SizeConstraint::Free, SizeConstraint::AtLeast(5)),
-                    ),
-                )
-                .resized(SizeConstraint::Full, SizeConstraint::Free),
-            );
-        }
+    s.call_on_name("input", |view: &mut TextArea| {
+        view.set_content("");
     });
 }
 
 fn solve(s: &mut Cursive) {
-    let user_data: &mut UserData = s.user_data::<UserData>().unwrap();
-    let fields = user_data.fields.clone().unwrap();
-    let mut variable_values: HashMap<String, String> = HashMap::new();
-    for var_name in fields {
-        let input_name = format!("input-{}", var_name);
-        let var_value: String = s
-            .call_on_name(input_name.as_str(), |v: &mut TextArea| {
-                return v.get_content().to_owned();
-            })
-            .unwrap_or("".to_owned());
-        variable_values.insert(var_name, var_value);
-    }
+    let input = s
+        .call_on_name("input", |v: &mut TextArea| {
+            return v.get_content().to_owned();
+        })
+        .unwrap();
 
     let user_data: &mut UserData = s.user_data::<UserData>().unwrap();
     let selected_challenge = user_data
@@ -114,7 +86,7 @@ fn solve(s: &mut Cursive) {
             user_data.selected_challenge.clone().unwrap().as_str(),
         )
         .unwrap();
-    let message = match selected_challenge.solve_string(variable_values) {
+    let message = match selected_challenge.solve(&input) {
         Ok(solution) => solution,
         Err(e) => format!("Error:\n{}", e),
     };
@@ -166,18 +138,30 @@ fn create_challenge_select() -> Box<dyn View> {
 
 fn create_challenge_display() -> Box<dyn View> {
     let button = Button::new("Solve", |s| solve(s));
-    let panel = Panel::new(
-        LinearLayout::vertical()
-            .child(
-                ScrollView::new(
-                    LinearLayout::vertical()
-                        .child(TextView::new("").with_name("description"))
-                        .with_name("content"),
+    let panel =
+        Panel::new(
+            LinearLayout::vertical()
+                .child(
+                    ScrollView::new(
+                        LinearLayout::vertical()
+                            .child(TextView::new("").with_name("description"))
+                            .child(
+                                Panel::new(
+                                    LinearLayout::vertical()
+                                        .child(TextView::new("input"))
+                                        .child(TextArea::new().with_name("input").resized(
+                                            SizeConstraint::Free,
+                                            SizeConstraint::AtLeast(5),
+                                        )),
+                                )
+                                .resized(SizeConstraint::Full, SizeConstraint::Free),
+                            )
+                            .with_name("content"),
+                    )
+                    .resized(SizeConstraint::Full, SizeConstraint::Full),
                 )
-                .resized(SizeConstraint::Full, SizeConstraint::Full),
-            )
-            .child(button),
-    );
+                .child(button),
+        );
     return pad(panel.resized(SizeConstraint::Full, SizeConstraint::Full)).as_boxed_view();
 }
 
@@ -190,7 +174,6 @@ fn main() {
         group_manager: GroupManager::new(),
         selected_group: first_group.to_owned(),
         selected_challenge: None,
-        fields: None,
     });
 
     let linear_layout = LinearLayout::horizontal()

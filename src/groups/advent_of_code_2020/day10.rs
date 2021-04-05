@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 use anyhow::Result;
 use petgraph::{
@@ -15,12 +15,8 @@ impl ChallengeConfig for Day10 {
         return "Day 10: Adapter Array";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Adapters".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let mut numbers: Vec<usize> = variables["Adapters"]
+    fn solve(&self, input: &str) -> Result<String> {
+        let mut numbers: Vec<usize> = input
             .split_whitespace()
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -74,7 +70,6 @@ impl ChallengeConfig for Day10 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -133,9 +128,6 @@ mod tests {
     )]
     fn solve(adapters: &str, expected: &str) {
         let day = Day10 {};
-        assert_eq!(
-            day.solve(hashmap! {"Adapters" => adapters}).unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(adapters).unwrap(), expected);
     }
 }

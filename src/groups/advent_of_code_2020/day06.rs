@@ -1,9 +1,7 @@
-use std::collections::HashMap;
-
 use anyhow::Result;
 use itertools::Itertools;
 
-use crate::groups::challenge_config::ChallengeConfig;
+use crate::{groups::challenge_config::ChallengeConfig, utils::InputUtils};
 
 pub struct Day6 {}
 
@@ -14,17 +12,8 @@ impl ChallengeConfig for Day6 {
         return "Day 6: Custom Customs";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Answers".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let input_without_spaces = variables["Answers"].replace(" ", "");
-        let groups: Vec<&str> = input_without_spaces
-            .split("\n\n")
-            .map(|x| x.trim())
-            .filter(|x| !x.is_empty())
-            .collect();
+    fn solve(&self, input: &str) -> Result<String> {
+        let groups = input.split_sections();
 
         // Part 1: count number of distinct letters in each group
         // Part 2: count number of distinct letters that are in each line in each group
@@ -47,7 +36,6 @@ impl ChallengeConfig for Day6 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -76,9 +64,6 @@ mod tests {
     )]
     fn solve(answers: &str, expected: &str) {
         let day = Day6 {};
-        assert_eq!(
-            day.solve(hashmap! {"Answers" => answers}).unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(answers).unwrap(), expected);
     }
 }

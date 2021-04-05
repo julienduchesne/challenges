@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use anyhow::Result;
 use itertools::Itertools;
 
@@ -12,18 +10,16 @@ impl ChallengeConfig for Day9 {
         return "Day 9: Encoding Error";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Numbers".to_owned(), "Preamble length".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let preamble_length: usize = variables["Preamble length"].parse::<usize>()?;
-        let numbers: Vec<usize> = variables["Numbers"]
+    fn solve(&self, input: &str) -> Result<String> {
+        let numbers: Vec<usize> = input
             .split_whitespace()
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
             .map(|x| x.parse::<usize>())
             .collect::<Result<_, _>>()?;
+
+        // 5 for test, 25 otherwise
+        let preamble_length: usize = if numbers.len() < 100 { 5 } else { 25 };
 
         // Part 1: Find the number that doesn't have two other numbers before it that sum to it
         let mut part_one = 0;
@@ -93,14 +89,12 @@ impl ChallengeConfig for Day9 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
 
     #[rstest(
         numbers,
-        preamble_length,
         expected,
         case(
             "35
@@ -123,16 +117,11 @@ mod tests {
             277
             309
             576",
-            "5",
             "Part 1: 127\nPart 2: 62"
         )
     )]
-    fn solve(numbers: &str, preamble_length: &str, expected: &str) {
+    fn solve(numbers: &str, expected: &str) {
         let day = Day9 {};
-        assert_eq!(
-            day.solve(hashmap! {"Numbers" => numbers, "Preamble length" => preamble_length})
-                .unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(numbers).unwrap(), expected);
     }
 }

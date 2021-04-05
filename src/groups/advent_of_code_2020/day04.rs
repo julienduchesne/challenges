@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use anyhow::Result;
 use regex::Regex;
 
-use crate::groups::challenge_config::ChallengeConfig;
+use crate::{groups::challenge_config::ChallengeConfig, utils::InputUtils};
 
 pub struct Day4 {}
 
@@ -74,17 +74,8 @@ impl ChallengeConfig for Day4 {
         return "Day 4: Passport Processing";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Passports".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let input_without_double_spaces = variables["Passports"].replace("  ", "");
-        let blocks: Vec<&str> = input_without_double_spaces
-            .split("\n\n")
-            .map(|x| x.trim())
-            .filter(|x| !x.is_empty())
-            .collect();
+    fn solve(&self, input: &str) -> Result<String> {
+        let blocks = input.split_sections();
         let passports: Vec<HashMap<&str, &str>> = blocks
             .iter()
             .map(|x| {
@@ -104,7 +95,6 @@ impl ChallengeConfig for Day4 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -164,9 +154,6 @@ mod tests {
     )]
     fn solve(passports: &str, expected: &str) {
         let day = Day4 {};
-        assert_eq!(
-            day.solve(hashmap! {"Passports" => passports}).unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(passports).unwrap(), expected);
     }
 }

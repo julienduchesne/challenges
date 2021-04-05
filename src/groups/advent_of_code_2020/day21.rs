@@ -11,12 +11,8 @@ impl ChallengeConfig for Day21 {
         return "Day 21: Allergen Assessment";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Foods".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let foods: Vec<&str> = variables["Foods"]
+    fn solve(&self, input: &str) -> Result<String> {
+        let foods: Vec<&str> = input
             .split("\n")
             .map(str::trim)
             .filter(|x| !x.is_empty())
@@ -99,7 +95,6 @@ impl ChallengeConfig for Day21 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -117,6 +112,6 @@ mod tests {
     )]
     fn solve(foods: &str, expected: &str) {
         let day = Day21 {};
-        assert_eq!(day.solve(hashmap! {"Foods" => foods}).unwrap(), expected);
+        assert_eq!(day.solve(foods).unwrap(), expected);
     }
 }

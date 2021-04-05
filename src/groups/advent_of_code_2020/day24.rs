@@ -102,12 +102,8 @@ impl ChallengeConfig for Day24 {
         return "Day 24: Lobby Layout";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Tiles".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let tiles: Vec<Vec<Move>> = variables["Tiles"]
+    fn solve(&self, input: &str) -> Result<String> {
+        let tiles: Vec<Vec<Move>> = input
             .split_whitespace()
             .map(|s| {
                 let mut moves = vec![];
@@ -179,7 +175,6 @@ impl ChallengeConfig for Day24 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -213,6 +208,6 @@ mod tests {
     )]
     fn solve(tiles: &str, expected: &str) {
         let day = Day24 {};
-        assert_eq!(day.solve(hashmap! {"Tiles" => tiles }).unwrap(), expected);
+        assert_eq!(day.solve(tiles).unwrap(), expected);
     }
 }

@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use anyhow::Result;
 use ndarray::{Array, Array2, Array3, Array4, Axis};
 
@@ -48,12 +46,8 @@ impl ChallengeConfig for Day17 {
         return "Day 17: Conway Cubes";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Initial layer".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let lines: Vec<&str> = variables["Initial layer"]
+    fn solve(&self, input: &str) -> Result<String> {
+        let lines: Vec<&str> = input
             .split("\n")
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -143,7 +137,6 @@ impl ChallengeConfig for Day17 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -160,10 +153,6 @@ mod tests {
     )]
     fn solve(initial_layer: &str, expected: &str) {
         let day = Day17 {};
-        assert_eq!(
-            day.solve(hashmap! {"Initial layer" => initial_layer})
-                .unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(initial_layer).unwrap(), expected);
     }
 }

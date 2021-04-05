@@ -17,7 +17,7 @@ impl ChallengeConfig for Day1 {
         return vec!["masses".to_owned()];
     }
 
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
+    fn solve(&self, input: &str) -> Result<String> {
         return Ok(format!("Part 1: {}\nPart 2: {}", 0, 0).to_string());
     }
 }

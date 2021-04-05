@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 use anyhow::Result;
 use ndarray::{Array, Array2, Axis};
@@ -117,12 +117,8 @@ impl ChallengeConfig for Day20 {
         return "Day 20: Jurassic Jigsaw";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Tiles".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let mut tiles: Vec<Tile> = variables["Tiles"]
+    fn solve(&self, input: &str) -> Result<String> {
+        let mut tiles: Vec<Tile> = input
             .split("Tile")
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -306,7 +302,6 @@ impl ChallengeConfig for Day20 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use ndarray::arr2;
     use rstest::rstest;
 
@@ -428,7 +423,7 @@ mod tests {
     )]
     fn solve(tiles: &str, expected: &str) {
         let day = Day20 {};
-        assert_eq!(day.solve(hashmap! {"Tiles" => tiles}).unwrap(), expected);
+        assert_eq!(day.solve(tiles).unwrap(), expected);
     }
 
     #[rstest(

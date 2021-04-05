@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fmt};
+use std::fmt;
 
 use anyhow::Result;
 use thiserror::Error;
@@ -27,14 +27,5 @@ pub trait ChallengeConfig {
     fn description(&self) -> &str {
         return "";
     }
-    fn variables(&self) -> Vec<String>;
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String>;
-    fn solve_string(&self, variables: HashMap<String, String>) -> Result<String> {
-        return self.solve(
-            variables
-                .iter()
-                .map(|(k, v)| (k.as_str(), v.as_str()))
-                .collect(),
-        );
-    }
+    fn solve(&self, input: &str) -> Result<String>;
 }

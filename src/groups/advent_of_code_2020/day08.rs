@@ -1,7 +1,4 @@
-use std::{
-    collections::{HashMap, HashSet},
-    convert::TryInto,
-};
+use std::{collections::HashSet, convert::TryInto};
 
 use anyhow::Result;
 
@@ -53,8 +50,8 @@ impl Instruction {
 pub struct Day8 {}
 
 impl Day8 {
-    fn solve_part_one(&self, variables: HashMap<&str, &str>) -> Result<isize> {
-        let instructions: Vec<Instruction> = match variables["Instructions"]
+    fn solve_part_one(&self, input: &str) -> Result<isize> {
+        let instructions: Vec<Instruction> = match input
             .split("\n")
             .map(|x| x.trim())
             .filter(|x| !x.is_empty())
@@ -81,8 +78,8 @@ impl Day8 {
         return Ok(acc);
     }
 
-    fn solve_part_two(&self, variables: HashMap<&str, &str>) -> Result<isize> {
-        let lines: Vec<String> = variables["Instructions"]
+    fn solve_part_two(&self, input: &str) -> Result<isize> {
+        let lines: Vec<String> = input
             .split("\n")
             .map(|x| String::from(x.trim()))
             .filter(|x| !x.is_empty())
@@ -129,16 +126,12 @@ impl ChallengeConfig for Day8 {
         return "Day 8: Handheld Halting";
     }
 
-    fn variables(&self) -> Vec<String> {
-        return vec!["Instructions".to_owned()];
-    }
-
-    fn solve(&self, variables: HashMap<&str, &str>) -> Result<String> {
-        let part_one = match self.solve_part_one(variables.clone()) {
+    fn solve(&self, input: &str) -> Result<String> {
+        let part_one = match self.solve_part_one(input.clone()) {
             Ok(result) => result,
             Err(e) => return Err(e.downcast().unwrap()),
         };
-        let part_two = match self.solve_part_two(variables.clone()) {
+        let part_two = match self.solve_part_two(input.clone()) {
             Ok(result) => result,
             Err(e) => return Err(e.downcast().unwrap()),
         };
@@ -149,7 +142,6 @@ impl ChallengeConfig for Day8 {
 
 #[cfg(test)]
 mod tests {
-    use maplit::hashmap;
     use rstest::rstest;
 
     use super::*;
@@ -172,10 +164,6 @@ mod tests {
     )]
     fn solve(instructions: &str, expected: &str) {
         let day = Day8 {};
-        assert_eq!(
-            day.solve(hashmap! {"Instructions" => instructions})
-                .unwrap(),
-            expected
-        );
+        assert_eq!(day.solve(instructions).unwrap(), expected);
     }
 }
