@@ -2,15 +2,16 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
 )
 
 type Day struct {
-	ID          int
-	Title       string
-	Description string
+	ID          int    `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
 	solveFunc   func(string) (string, error)
 }
 
@@ -27,7 +28,12 @@ func main() {
 	}
 
 	if command := os.Args[1]; command == "list" {
-		fmt.Println(days)
+		marshalled, err := json.MarshalIndent(days, "", "  ")
+		if err != nil {
+			fmt.Printf("Got an error while converting challenges to JSON: %v", err)
+			os.Exit(1)
+		}
+		fmt.Println(string(marshalled))
 	} else if command == "solve" {
 		if len(os.Args) < 3 {
 			fmt.Println("Expected and ID for the solve comand")

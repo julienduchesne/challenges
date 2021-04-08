@@ -216,6 +216,7 @@ dependencies = [
  "rocket_cors",
  "rstest",
  "serde",
+ "serde_json",
  "thiserror",
 ]
 
