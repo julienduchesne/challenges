@@ -9,7 +9,7 @@ use super::super::{challenge_config::ChallengeConfig, group_config::GroupConfig}
 
 #[derive(Serialize, Deserialize)]
 pub struct GoChallenge {
-    id: String,
+    id: i32,
     title: String,
     description: String,
 }
@@ -25,23 +25,31 @@ impl ChallengeConfig for GoChallenge {
 
     fn solve(&self, input: &str) -> anyhow::Result<String> {
         let mut command = Command::new("./advent_of_code_2019")
+            .current_dir("/Users/julienduchesne/Repos/challenges-rust-tui/target/debug") // TODO: Packaging
             .arg("solve")
-            .arg(self.id.as_str())
+            .arg(self.id.to_string())
+            .stdout(Stdio::piped())
             .stdin(Stdio::piped())
             .spawn()?;
         let stdin = command.stdin.as_mut().unwrap();
         stdin.write_all(input.as_bytes())?;
         // Close stdin to finish and avoid indefinite blocking
         drop(stdin);
-        return Ok(String::from_utf8(command.wait_with_output()?.stdout)?);
+        let output = String::from_utf8(command.wait_with_output()?.stdout)?;
+        return Ok(output);
     }
 }
 
-pub struct AdventOfCode2019 {}
+pub struct AdventOfCode2019 {
+    challenges: Vec<Box<dyn ChallengeConfig>>,
+}
 
 impl AdventOfCode2019 {
     fn list_challenges() -> anyhow::Result<Vec<GoChallenge>> {
-        let output = Command::new("./advent_of_code_2019").arg("list").output()?;
+        let output = Command::new("./advent_of_code_2019")
+            .current_dir("/Users/julienduchesne/Repos/challenges-rust-tui/target/debug") // TODO: Packaging
+            .arg("list")
+            .output()?;
         let output_str = String::from_utf8(output.stdout)?;
         let v: Vec<GoChallenge> = serde_json::from_str(&output_str)?;
         return Ok(v);
@@ -53,17 +61,6 @@ impl GroupConfig for AdventOfCode2019 {
     where
         Self: Sized,
     {
-        return AdventOfCode2019 {};
-    }
-
-    fn name(&self) -> &str {
-        return "Advent of Code 2019";
-    }
-    fn url(&self) -> &str {
-        return "https://adventofcode.com/2019";
-    }
-
-    fn challenges(&self) -> &Vec<Box<dyn ChallengeConfig>> {
         let challenges = match AdventOfCode2019::list_challenges() {
             Ok(v) => v
                 .into_iter()
@@ -74,9 +71,22 @@ impl GroupConfig for AdventOfCode2019 {
                     "Got an error while listing challenges for Advent of Code 2019: {}",
                     err
                 );
-                return &vec![];
+                vec![]
             }
         };
-        return &challenges;
+        return AdventOfCode2019 {
+            challenges: challenges,
+        };
+    }
+
+    fn name(&self) -> &str {
+        return "Advent of Code 2019";
+    }
+    fn url(&self) -> &str {
+        return "https://adventofcode.com/2019";
+    }
+
+    fn challenges(&self) -> &Vec<Box<dyn ChallengeConfig>> {
+        return &self.challenges;
     }
 }

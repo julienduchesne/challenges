@@ -1,6 +1,6 @@
 use super::{
-    advent_of_code_2020::config::AdventOfCode2020, challenge_config::ChallengeConfig,
-    group_config::GroupConfig,
+    advent_of_code_2019::config::AdventOfCode2019, advent_of_code_2020::config::AdventOfCode2020,
+    challenge_config::ChallengeConfig, group_config::GroupConfig,
 };
 
 pub struct GroupManager {
@@ -10,7 +10,10 @@ pub struct GroupManager {
 impl GroupManager {
     pub fn new() -> GroupManager {
         return GroupManager {
-            groups: vec![Box::new(AdventOfCode2020::new())],
+            groups: vec![
+                Box::new(AdventOfCode2019::new()),
+                Box::new(AdventOfCode2020::new()),
+            ],
         };
     }
 
