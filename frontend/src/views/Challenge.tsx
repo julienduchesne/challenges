@@ -87,10 +87,6 @@ class Group extends Component<RouteComponentProps & WithStyles<typeof styles>, C
                 }}
             />
 
-
-
-
-
             <Button className={classes.input} onClick={solveProblem} variant="contained" color="primary">
                 Solve
             </Button>
@@ -103,7 +99,7 @@ class Group extends Component<RouteComponentProps & WithStyles<typeof styles>, C
                 <DialogTitle id="alert-dialog-title">{"Answer"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        {this.state.dialogContent?.split('\n').map(str => <p>{str}</p>)}
+                        {this.state.dialogContent?.split('\n').map(str => <div>{str}</div>)}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

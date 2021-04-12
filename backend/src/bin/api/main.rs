@@ -3,7 +3,7 @@
 use anyhow::Result;
 use challenges::groups::{group_config::GroupConfig, group_manager::GroupManager};
 use regex::Regex;
-use rocket::http::Method;
+use rocket::{http::Method, Data};
 use rocket_contrib::{json::Json, serve::StaticFiles};
 use rocket_cors::{AllowedHeaders, AllowedOrigins};
 use serde::Serialize;
@@ -136,7 +136,7 @@ fn challenge(group_key: String, challenge_key: String) -> Option<Json<Challenge>
     format = "text/plain",
     data = "<input>"
 )]
-fn solve(group_key: String, challenge_key: String, input: String) -> Option<Result<String>> {
+fn solve(group_key: String, challenge_key: String, input: Data) -> Option<Result<String>> {
     // Get the group
     let group_name = match get_group_name(&group_key) {
         Some(g) => g,
@@ -158,9 +158,15 @@ fn solve(group_key: String, challenge_key: String, input: String) -> Option<Resu
         None => return None,
     };
 
-    let solved = challenge.solve(&input);
-
-    Some(solved)
+    let mut data_bytes: Vec<u8> = vec![];
+    match input.stream_to(&mut data_bytes) {
+        Err(err) => return Some(Err(err.into())),
+        _ => {}
+    };
+    return match String::from_utf8(data_bytes) {
+        Ok(data) => Some(challenge.solve(&data)),
+        Err(err) => Some(Err(err.into())),
+    };
 }
 
 fn main() {
