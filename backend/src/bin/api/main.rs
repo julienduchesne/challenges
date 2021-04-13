@@ -4,7 +4,7 @@ use anyhow::Result;
 use challenges::groups::{group_config::GroupConfig, group_manager::GroupManager};
 use regex::Regex;
 use rocket::{http::Method, Data};
-use rocket_contrib::{json::Json, serve::StaticFiles};
+use rocket_contrib::json::Json;
 use rocket_cors::{AllowedHeaders, AllowedOrigins};
 use serde::Serialize;
 
@@ -186,7 +186,6 @@ fn main() {
     .to_cors()
     .unwrap();
     rocket::ignite()
-        .mount("/", StaticFiles::from("frontend/build"))
         .mount("/api/", routes![groups, group, challenge, solve])
         .attach(cors)
         .launch();
