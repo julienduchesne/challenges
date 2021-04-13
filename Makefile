@@ -1,17 +1,11 @@
-.PHONY: test run-frontend run-backend build-image run-image
+.PHONY: build test
 
 IMAGE_NAME := "julienduchesne/challenges"
 
+build:
+	cd advent_of_code_2019 && CGO_ENABLED=0 go build ./...
+	cd backend && cargo build --release
+
 test:
-	cd src/groups/advent_of_code_2019 && go test ./...
-	cargo test
-
-run-frontend:
-	
-run-backend:
-
-build-image:
-	docker build . -t $(IMAGE_NAME)
-
-run-image: build-image
-	docker run $(IMAGE_NAME)
+	cd advent_of_code_2019 && go test ./...
+	cd backend && cargo test

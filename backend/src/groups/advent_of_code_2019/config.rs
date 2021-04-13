@@ -41,17 +41,17 @@ impl ChallengeConfig for GoChallenge {
 }
 
 pub struct AdventOfCode2019 {
+    port: i32,
     challenges: Vec<Box<dyn ChallengeConfig>>,
 }
 
 impl AdventOfCode2019 {
-    fn list_challenges() -> anyhow::Result<Vec<GoChallenge>> {
-        let output = Command::new("./advent_of_code_2019")
-            .current_dir("/Users/julienduchesne/Repos/challenges-rust-tui/target/debug") // TODO: Packaging
-            .arg("list")
-            .output()?;
-        let output_str = String::from_utf8(output.stdout)?;
-        let v: Vec<GoChallenge> = serde_json::from_str(&output_str)?;
+    fn list_challenges(port: i32) -> anyhow::Result<Vec<GoChallenge>> {
+        let client = reqwest::blocking::Client::new();
+        let res = client
+            .get(format!("http://localhost:{}/list", port))
+            .send()?;
+        let v: Vec<GoChallenge> = res.json()?;
         return Ok(v);
     }
 }
@@ -61,7 +61,11 @@ impl GroupConfig for AdventOfCode2019 {
     where
         Self: Sized,
     {
-        let challenges = match AdventOfCode2019::list_challenges() {
+        let port = match std::env::var("CHALLENGES_AOC_2019_PORT") {
+            Ok(p) => p.parse::<i32>().unwrap_or(8082),
+            Err(_) => 8082,
+        };
+        let challenges = match AdventOfCode2019::list_challenges(port) {
             Ok(v) => v
                 .into_iter()
                 .map(|e| Box::new(e) as Box<dyn ChallengeConfig>)
@@ -75,6 +79,7 @@ impl GroupConfig for AdventOfCode2019 {
             }
         };
         return AdventOfCode2019 {
+            port: port,
             challenges: challenges,
         };
     }
