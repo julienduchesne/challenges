@@ -3,9 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
 )
 
 type Day struct {
@@ -36,36 +39,37 @@ func list(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, string(marshalled))
 }
 
-type SolveRequest struct {
-	ID    int    `json:"id"`
-	Input string `json:"input"`
-}
-
 func solve(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, "Only POST is supported for /solve", 400)
 		return
 	}
 
-	dec := json.NewDecoder(r.Body)
-	var data SolveRequest
-	if err := dec.Decode(&data); err != nil {
-		http.Error(w, fmt.Sprintf("Got an error while parsing the body: %v", err), 400)
+	id, err := strconv.Atoi(strings.Trim(strings.TrimPrefix(r.URL.Path, "/solve/"), "/"))
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Invalid id: %s", r.URL.Path), 400)
 		return
 	}
 
 	var day *Day
 	for _, d := range days {
-		if d.ID == data.ID {
+		if d.ID == id {
 			day = &d
+			break
 		}
 	}
 	if day == nil {
-		http.Error(w, fmt.Sprintf("ID %d did not match a day", data.ID), 400)
+		http.Error(w, fmt.Sprintf("ID %d did not match a day", id), 400)
 		return
 	}
 
-	solved, err := day.solveFunc(data.Input)
+	bytes, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error reading the request's body: %v", err), 400)
+		return
+	}
+
+	solved, err := day.solveFunc(string(bytes))
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Got an error while solving: %v", err), 400)
 		return

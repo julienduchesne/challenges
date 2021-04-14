@@ -1,17 +1,15 @@
-use std::{
-    io::Write,
-    process::{Command, Stdio},
-};
-
 use serde::{Deserialize, Serialize};
 
 use super::super::{challenge_config::ChallengeConfig, group_config::GroupConfig};
+
+const DEFAULT_PORT: i32 = 8082;
 
 #[derive(Serialize, Deserialize)]
 pub struct GoChallenge {
     id: i32,
     title: String,
     description: String,
+    port: Option<i32>,
 }
 
 impl ChallengeConfig for GoChallenge {
@@ -24,24 +22,20 @@ impl ChallengeConfig for GoChallenge {
     }
 
     fn solve(&self, input: &str) -> anyhow::Result<String> {
-        let mut command = Command::new("./advent_of_code_2019")
-            .current_dir("/Users/julienduchesne/Repos/challenges-rust-tui/target/debug") // TODO: Packaging
-            .arg("solve")
-            .arg(self.id.to_string())
-            .stdout(Stdio::piped())
-            .stdin(Stdio::piped())
-            .spawn()?;
-        let stdin = command.stdin.as_mut().unwrap();
-        stdin.write_all(input.as_bytes())?;
-        // Close stdin to finish and avoid indefinite blocking
-        drop(stdin);
-        let output = String::from_utf8(command.wait_with_output()?.stdout)?;
-        return Ok(output);
+        let client = reqwest::blocking::Client::new();
+        let res = client
+            .post(format!(
+                "http://localhost:{}/solve/{}",
+                self.port.unwrap_or(DEFAULT_PORT),
+                self.id
+            ))
+            .body(String::from(input))
+            .send()?;
+        return Ok(res.text()?);
     }
 }
 
 pub struct AdventOfCode2019 {
-    port: i32,
     challenges: Vec<Box<dyn ChallengeConfig>>,
 }
 
@@ -51,7 +45,8 @@ impl AdventOfCode2019 {
         let res = client
             .get(format!("http://localhost:{}/list", port))
             .send()?;
-        let v: Vec<GoChallenge> = res.json()?;
+        let mut v: Vec<GoChallenge> = res.json()?;
+        v.iter_mut().for_each(|i| i.port = Some(port));
         return Ok(v);
     }
 }
@@ -62,8 +57,8 @@ impl GroupConfig for AdventOfCode2019 {
         Self: Sized,
     {
         let port = match std::env::var("CHALLENGES_AOC_2019_PORT") {
-            Ok(p) => p.parse::<i32>().unwrap_or(8082),
-            Err(_) => 8082,
+            Ok(p) => p.parse::<i32>().unwrap_or(DEFAULT_PORT),
+            Err(_) => DEFAULT_PORT,
         };
         let challenges = match AdventOfCode2019::list_challenges(port) {
             Ok(v) => v
@@ -79,7 +74,6 @@ impl GroupConfig for AdventOfCode2019 {
             }
         };
         return AdventOfCode2019 {
-            port: port,
             challenges: challenges,
         };
     }

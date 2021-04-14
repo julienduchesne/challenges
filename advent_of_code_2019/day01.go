@@ -1,7 +1,7 @@
 package main
 
 func solveDay01(input string) (string, error) {
-	return "hello1" + input, nil
+	return "hello bro" + input, nil
 }
 
 func init() {

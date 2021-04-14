@@ -3,13 +3,15 @@
 use anyhow::Result;
 use challenges::groups::{group_config::GroupConfig, group_manager::GroupManager};
 use regex::Regex;
-use rocket::{http::Method, Data};
+use rocket::{http::Method, Config, Data};
 use rocket_contrib::json::Json;
 use rocket_cors::{AllowedHeaders, AllowedOrigins};
 use serde::Serialize;
 
 #[macro_use]
 extern crate rocket;
+
+const DEFAULT_PORT: u16 = 8081;
 
 #[derive(Clone, Serialize, Debug)]
 pub struct ItemName {
@@ -185,7 +187,13 @@ fn main() {
     }
     .to_cors()
     .unwrap();
-    rocket::ignite()
+    let port = match std::env::var("CHALLENGES_API_PORT") {
+        Ok(p) => p.parse::<u16>().unwrap_or(DEFAULT_PORT),
+        Err(_) => DEFAULT_PORT,
+    };
+    let mut config = Config::active().unwrap();
+    config.set_port(port);
+    rocket::custom(config)
         .mount("/api/", routes![groups, group, challenge, solve])
         .attach(cors)
         .launch();

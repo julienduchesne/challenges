@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000/api"
+const API_URL = `http://localhost:${process.env.REACT_APP_API_PORT}/api`
 
 type GroupName = {
     key: string
