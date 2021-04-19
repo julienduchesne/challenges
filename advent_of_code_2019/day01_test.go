@@ -21,7 +21,7 @@ Part 2: 50346`},
 	for _, test := range tests {
 		solved, err := solveDay01(test.input)
 		assert.NoError(t, err)
-		assert.Equal(t, solved, test.expected)
+		assert.Equal(t, test.expected, solved)
 	}
 
 }
