@@ -17,11 +17,13 @@ Environment Variables:
 ### Backend
 
 Language: Rust
+
 Exposes through an API ([Rocket](https://rocket.rs/)) and a Text User Interface ([Cursive](https://github.com/gyscos/cursive)) the solutions for the Advent of Code 2020. It also fronts the solutions for other challenge series (modules listed below)
 
 ### Advent of Code 2019 Module
 
 Language: Go
+
 Exposes, through a simple HTTP API, the solutions for Advent of Code 2020
 
 ### Frontend
