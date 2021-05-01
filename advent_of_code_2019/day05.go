@@ -15,8 +15,12 @@ func solveDay05(input string) (string, error) {
 		}
 		code = append(code, vInt)
 	}
-	_, p1 := runIntcode(code, 1)
-	_, p2 := runIntcode(code, 5)
+	p1Input := make(chan int, 1)
+	p1Input <- 1
+	_, p1 := runIntcode(code, p1Input, nil)
+	p2Input := make(chan int, 1)
+	p2Input <- 5
+	_, p2 := runIntcode(code, p2Input, nil)
 	return fmt.Sprintf("Part 1: %d\nPart 2: %d", p1, p2), nil
 }
 

@@ -2,7 +2,7 @@
 
 package main
 
-func runIntcode(codeValues []int, inputValue int) ([]int, int) {
+func runIntcode(codeValues []int, inputChannel chan int, outputChannel chan int) ([]int, int) {
 	code := make([]int, len(codeValues))
 	copy(code, codeValues)
 	position := 0
@@ -41,11 +41,14 @@ outer:
 			}
 			position += 4
 		case 3:
-			code[first] = inputValue
+			code[first] = <-inputChannel
 			position += 2
 		case 4:
 			if !firstImmediate {
 				first = code[first]
+			}
+			if outputChannel != nil {
+				outputChannel <- first
 			}
 			outputs = append(outputs, first)
 			position += 2

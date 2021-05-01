@@ -11,7 +11,7 @@ func tryNounVerb(codeValues []int, noun, verb int) int {
 	copy(code, codeValues)
 	code[1] = noun
 	code[2] = verb
-	code, _ = runIntcode(code, -1)
+	code, _ = runIntcode(code, nil, nil)
 	return code[0]
 }
 
