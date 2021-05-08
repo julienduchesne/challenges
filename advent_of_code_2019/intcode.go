@@ -1,19 +1,45 @@
-// Used in days 2, 5, 7
+// Used in days 2, 5, 7, 9
 
 package main
 
 func runIntcode(codeValues []int, inputChannel chan int, outputChannel chan int) ([]int, int) {
 	code := make([]int, len(codeValues))
 	copy(code, codeValues)
+
+	writeValue := func(pos, v int) {
+		// If the slice is not long enough, expand it
+		for i := len(code); i <= pos; i++ {
+			code = append(code, 0)
+		}
+		code[pos] = v
+	}
+
 	position := 0
+	relativeBase := 0
 	var outputs []int
 outer:
 	for {
 		v := code[position]
 		opcode := v % 100
-		firstImmediate := (v%1000)/100 == 1
-		secondImmediate := (v%10000)/1000 == 1
+		firstMode := (v % 1000) / 100
+		secondMode := (v % 10000) / 1000
+		thirdMode := (v % 100000) / 10000
 		var first, second, third int
+
+		getRelOrAbs := func(v int, mode int) int {
+			if mode == 0 || mode == 2 {
+				pos := v
+				if mode == 2 {
+					pos = relativeBase + v
+				}
+				// If the slice is not long enough, expand it
+				for i := len(code); i <= pos; i++ {
+					code = append(code, 0)
+				}
+				return code[pos]
+			}
+			return v
+		}
 
 		if len(code) > position+1 {
 			first = code[position+1]
@@ -27,56 +53,56 @@ outer:
 
 		switch opcode {
 		case 1, 2:
-			if !firstImmediate {
-				first = code[first]
-			}
-			if !secondImmediate {
-				second = code[second]
+			first = getRelOrAbs(first, firstMode)
+			second = getRelOrAbs(second, secondMode)
+			if thirdMode == 2 {
+				third += relativeBase
 			}
 
 			if opcode == 1 {
-				code[third] = first + second
+				writeValue(third, first+second)
 			} else if opcode == 2 {
-				code[third] = first * second
+				writeValue(third, first*second)
 			}
 			position += 4
 		case 3:
-			code[first] = <-inputChannel
+			if firstMode == 2 {
+				first += relativeBase
+			}
+			writeValue(first, <-inputChannel)
 			position += 2
 		case 4:
-			if !firstImmediate {
-				first = code[first]
-			}
+			first = getRelOrAbs(first, firstMode)
 			if outputChannel != nil {
 				outputChannel <- first
 			}
 			outputs = append(outputs, first)
 			position += 2
 		case 5, 6:
-			if !firstImmediate {
-				first = code[first]
-			}
-			if !secondImmediate {
-				second = code[second]
-			}
+			first = getRelOrAbs(first, firstMode)
+			second = getRelOrAbs(second, secondMode)
+
 			if (first != 0 && opcode == 5) || (first == 0 && opcode == 6) {
 				position = second
 			} else {
 				position += 3
 			}
 		case 7, 8:
-			if !firstImmediate {
-				first = code[first]
+			first = getRelOrAbs(first, firstMode)
+			second = getRelOrAbs(second, secondMode)
+			if thirdMode == 2 {
+				third += relativeBase
 			}
-			if !secondImmediate {
-				second = code[second]
-			}
+
 			if (first < second && opcode == 7) || (first == second && opcode == 8) {
-				code[third] = 1
+				writeValue(third, 1)
 			} else {
-				code[third] = 0
+				writeValue(third, 0)
 			}
 			position += 4
+		case 9:
+			relativeBase += getRelOrAbs(first, firstMode)
+			position += 2
 		case 99:
 			break outer
 		}

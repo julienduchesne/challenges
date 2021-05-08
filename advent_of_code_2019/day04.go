@@ -58,7 +58,6 @@ func solveDay04(input string) (string, error) {
 		}()
 	}
 
-	fmt.Println(len(resultChan))
 	var firstTotal, secondTotal int
 	for x := start; x <= end; x++ {
 		result := <-resultChan
