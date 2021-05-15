@@ -1,5 +1,5 @@
 use super::{
-    advent_of_code_2019::config::AdventOfCode2019, advent_of_code_2020::config::AdventOfCode2020,
+    advent_of_code_2020::config::AdventOfCode2020, api_group_config::ApiGroupConfig,
     challenge_config::ChallengeConfig, group_config::GroupConfig,
 };
 
@@ -11,7 +11,12 @@ impl GroupManager {
     pub fn new() -> GroupManager {
         return GroupManager {
             groups: vec![
-                Box::new(AdventOfCode2019::new()),
+                Box::new(ApiGroupConfig::new(
+                    "Advent of Code 2019",
+                    "https://adventofcode.com/2019",
+                    8082,
+                    "CHALLENGES_AOC_2019_PORT",
+                )),
                 Box::new(AdventOfCode2020::new()),
             ],
         };

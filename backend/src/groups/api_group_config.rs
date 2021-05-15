@@ -1,18 +1,16 @@
 use serde::{Deserialize, Serialize};
 
-use super::super::{challenge_config::ChallengeConfig, group_config::GroupConfig};
-
-const DEFAULT_PORT: i32 = 8082;
+use super::{challenge_config::ChallengeConfig, group_config::GroupConfig};
 
 #[derive(Serialize, Deserialize)]
-pub struct GoChallenge {
+pub struct ApiChallenge {
     id: i32,
     title: String,
     description: String,
     port: Option<i32>,
 }
 
-impl ChallengeConfig for GoChallenge {
+impl ChallengeConfig for ApiChallenge {
     fn title(&self) -> &str {
         return self.title.as_str();
     }
@@ -26,7 +24,7 @@ impl ChallengeConfig for GoChallenge {
         let res = client
             .post(format!(
                 "http://localhost:{}/solve/{}",
-                self.port.unwrap_or(DEFAULT_PORT),
+                self.port.unwrap(),
                 self.id
             ))
             .body(String::from(input))
@@ -35,32 +33,22 @@ impl ChallengeConfig for GoChallenge {
     }
 }
 
-pub struct AdventOfCode2019 {
+pub struct ApiGroupConfig {
+    name: String,
+    challenges_url: String,
     challenges: Vec<Box<dyn ChallengeConfig>>,
 }
 
-impl AdventOfCode2019 {
-    fn list_challenges(port: i32) -> anyhow::Result<Vec<GoChallenge>> {
-        let client = reqwest::blocking::Client::new();
-        let res = client
-            .get(format!("http://localhost:{}/list", port))
-            .send()?;
-        let mut v: Vec<GoChallenge> = res.json()?;
-        v.iter_mut().for_each(|i| i.port = Some(port));
-        return Ok(v);
-    }
-}
-
-impl GroupConfig for AdventOfCode2019 {
-    fn new() -> Self
+impl ApiGroupConfig {
+    pub fn new(name: &str, challenges_url: &str, default_port: i32, port_envvar: &str) -> Self
     where
         Self: Sized,
     {
-        let port = match std::env::var("CHALLENGES_AOC_2019_PORT") {
-            Ok(p) => p.parse::<i32>().unwrap_or(DEFAULT_PORT),
-            Err(_) => DEFAULT_PORT,
+        let port = match std::env::var(port_envvar) {
+            Ok(p) => p.parse::<i32>().unwrap_or(default_port),
+            Err(_) => default_port,
         };
-        let challenges = match AdventOfCode2019::list_challenges(port) {
+        let challenges = match ApiGroupConfig::list_challenges(port) {
             Ok(v) => v
                 .into_iter()
                 .map(|e| Box::new(e) as Box<dyn ChallengeConfig>)
@@ -73,16 +61,30 @@ impl GroupConfig for AdventOfCode2019 {
                 vec![]
             }
         };
-        return AdventOfCode2019 {
+        return ApiGroupConfig {
+            name: String::from(name),
+            challenges_url: String::from(challenges_url),
             challenges: challenges,
         };
     }
 
+    fn list_challenges(port: i32) -> anyhow::Result<Vec<ApiChallenge>> {
+        let client = reqwest::blocking::Client::new();
+        let res = client
+            .get(format!("http://localhost:{}/list", port))
+            .send()?;
+        let mut v: Vec<ApiChallenge> = res.json()?;
+        v.iter_mut().for_each(|i| i.port = Some(port));
+        return Ok(v);
+    }
+}
+
+impl GroupConfig for ApiGroupConfig {
     fn name(&self) -> &str {
-        return "Advent of Code 2019";
+        return self.name.as_str();
     }
     fn url(&self) -> &str {
-        return "https://adventofcode.com/2019";
+        return self.challenges_url.as_str();
     }
 
     fn challenges(&self) -> &Vec<Box<dyn ChallengeConfig>> {

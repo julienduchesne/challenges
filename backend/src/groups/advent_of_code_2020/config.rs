@@ -31,8 +31,8 @@ pub struct AdventOfCode2020 {
     challenges: Vec<Box<dyn ChallengeConfig>>,
 }
 
-impl GroupConfig for AdventOfCode2020 {
-    fn new() -> Self
+impl AdventOfCode2020 {
+    pub fn new() -> Self
     where
         Self: Sized,
     {
@@ -66,7 +66,9 @@ impl GroupConfig for AdventOfCode2020 {
             ],
         };
     }
+}
 
+impl GroupConfig for AdventOfCode2020 {
     fn name(&self) -> &str {
         return "Advent of Code 2020";
     }
