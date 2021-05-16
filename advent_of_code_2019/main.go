@@ -7,12 +7,11 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 )
 
 type Day struct {
-	ID          int    `json:"id"`
+	ID          string `json:"id"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	solveFunc   func(string) (string, error)
@@ -21,7 +20,7 @@ type Day struct {
 var days []Day
 
 func registerDay(title, description string, solveFunc func(string) (string, error)) {
-	days = append(days, Day{ID: len(days) + 1, Title: title, Description: description, solveFunc: solveFunc})
+	days = append(days, Day{ID: fmt.Sprintf("%d", len(days)+1), Title: title, Description: description, solveFunc: solveFunc})
 }
 
 func list(w http.ResponseWriter, r *http.Request) {
@@ -45,11 +44,7 @@ func solve(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := strconv.Atoi(strings.Trim(strings.TrimPrefix(r.URL.Path, "/solve/"), "/"))
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Invalid id: %s", r.URL.Path), 400)
-		return
-	}
+	id := strings.Trim(strings.TrimPrefix(r.URL.Path, "/solve/"), "/")
 
 	var day *Day
 	for _, d := range days {
@@ -59,7 +54,7 @@ func solve(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if day == nil {
-		http.Error(w, fmt.Sprintf("ID %d did not match a day", id), 400)
+		http.Error(w, fmt.Sprintf("ID %s did not match a day", id), 400)
 		return
 	}
 

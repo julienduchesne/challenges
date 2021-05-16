@@ -4,7 +4,7 @@ use super::{challenge_config::ChallengeConfig, group_config::GroupConfig};
 
 #[derive(Serialize, Deserialize)]
 pub struct ApiChallenge {
-    id: i32,
+    id: String,
     title: String,
     description: String,
     port: Option<i32>,
