@@ -25,8 +25,11 @@ run-frontend:
 run-aoc2019:
 	cd advent_of_code_2019 && go run ./...
 
-# Run with -j3
-run-all: run-backend run-frontend run-aoc2019
+run-aoc2018:
+	cd advent_of_code_2018 && bash server.sh
+
+# Run with -j4
+run-all: run-backend run-frontend run-aoc2019 run-aoc2018
 
 
 .PHONY: test

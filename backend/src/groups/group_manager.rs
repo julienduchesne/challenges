@@ -12,6 +12,12 @@ impl GroupManager {
         return GroupManager {
             groups: vec![
                 Box::new(ApiGroupConfig::new(
+                    "Advent of Code 2018",
+                    "https://adventofcode.com/2018",
+                    8083,
+                    "CHALLENGES_AOC_2018_PORT",
+                )),
+                Box::new(ApiGroupConfig::new(
                     "Advent of Code 2019",
                     "https://adventofcode.com/2019",
                     8082,

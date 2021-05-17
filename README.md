@@ -4,13 +4,14 @@ An embarrassingly complex showcase of challenge solutions. This serves as a play
 
 ## How to run it
 
-To launch the complete solution, use `make run-all -j3`
+To launch the complete solution, use `make run-all -j4`
 
 Environment Variables:
 
 * `CHALLENGES_APP_PORT` (default = 8080)
 * `CHALLENGES_API_PORT` (default = 8081)
 * `CHALLENGES_AOC_2019_PORT` (default = 8082)
+* `CHALLENGES_AOC_2018_PORT` (default = 8083)
 
 ## Services
 
@@ -24,7 +25,13 @@ Exposes through an API ([Rocket](https://rocket.rs/)) and a Text User Interface 
 
 Language: Go
 
-Exposes, through a simple HTTP API, the solutions for Advent of Code 2020
+Exposes, through a simple HTTP API, the solutions for Advent of Code 2019
+
+### Advent of Code 2018 Module
+
+Language: Bash
+
+Exposes, through a simple (and frankly bad) HTTP API, the solutions for Advent of Code 2018
 
 ### Frontend
 
