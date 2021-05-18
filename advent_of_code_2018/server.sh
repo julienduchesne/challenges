@@ -30,7 +30,7 @@ do
     while read line
     do
       line=$(echo "$line" | tr -d '[\r\n]')
-      if echo "$line" | grep -qE '^GET /' # if line starts with "GET /"
+      if echo "$line" | grep -qE '^(GET|POST) /' # if line starts with "GET / or POST /"
       then
         REQUEST=$(echo "$line" | cut -d ' ' -f2) # extract the request
       elif [ "x$line" = x ] # empty line / end of request
