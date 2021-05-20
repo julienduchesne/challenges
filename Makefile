@@ -31,8 +31,17 @@ run-aoc2018:
 # Run with -j4
 run-all: run-backend run-frontend run-aoc2019 run-aoc2018
 
+# Test commands
 
-.PHONY: test
-test:
-	cd advent_of_code_2019 && go test ./...
+.PHONY: test-backend test-aoc2019 test-aoc2018
+
+test-backend:
 	cd backend && cargo test
+
+test-aoc2019:
+	cd advent_of_code_2019 && go test ./...
+
+test-aoc2018:
+	cd advent_of_code_2018 && bats .
+
+test: test-backend test-aoc2019 test-aoc2018
