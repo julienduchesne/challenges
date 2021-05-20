@@ -3,7 +3,7 @@
 helper() {
     result="$(echo "$1" | ./day01.sh)"
     echo "Result: $result"
-    [ "$result" == "$2" ]
+    [ "$result" == "$(echo -e "$2")" ]
 }
 
 @test "Day 01: 1" {

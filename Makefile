@@ -42,6 +42,7 @@ test-aoc2019:
 	cd advent_of_code_2019 && go test ./...
 
 test-aoc2018:
+	cd advent_of_code_2018 && shellcheck -P SCRIPTDIR *.sh
 	cd advent_of_code_2018 && bats .
 
 test: test-backend test-aoc2019 test-aoc2018
