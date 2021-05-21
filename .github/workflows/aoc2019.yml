@@ -1,0 +1,26 @@
+name: Advent of Code 2019 (Golang)
+on: 
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/setup-go@v1
+      with:
+        go-version: "1.16"
+        
+    - uses: actions/checkout@v2
+    
+    - name: Build
+      run: make build-aoc2019
+      
+    - name: Run tests
+      run: make test-aoc2019
