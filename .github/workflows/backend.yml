@@ -1,4 +1,4 @@
-name: Backend
+name: Backend (Rust)
 on: 
   push:
     branches: [master]
