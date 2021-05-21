@@ -1,0 +1,29 @@
+name: Advent of Code 2018 (Bash)
+on: 
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - name: Setup tools
+      run: |
+        apt-get install shellcheck
+        
+        # Install BATS
+        git clone https://github.com/bats-core/bats-core.git
+        cd bats-core
+        ./install.sh /usr/local
+        
+    - uses: actions/checkout@v2
+    
+    - name: Build
+      run: make build-aoc2019
+      
+    - name: Run tests
+      run: make test-aoc2019
