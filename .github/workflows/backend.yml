@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install minimal nightly with clippy and rustfmt
+    - name: Install latest nightly
       uses: actions-rs/toolchain@v1
       with:
-        profile: minimal
-        toolchain: nightly
-        
+          toolchain: nightly
+          override: true
+
     - uses: actions/checkout@v2
     
     - name: Build
