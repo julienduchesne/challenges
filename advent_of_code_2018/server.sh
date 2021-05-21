@@ -9,9 +9,9 @@ function list {
     title_line=$(grep -e "^# Title: .*$" "$filename")
     desc_line=$(grep -e "^# Description: .*$" "$filename")
     if [ -n "$title_line" ]; then
-      title=$(sed 's/# Title: //g' <<< "${title_line}")
+      title=${title_line//# Title: /}
       description=""
-      if [ -n "$desc_line" ]; then description=$(sed 's/# Description: //g' <<< "${desc_line}"); fi
+      if [ -n "$desc_line" ]; then description=${desc_line//# Description: /}; fi
       days=$(jq  '. |= . + [{id: "'"${filename#"${SCRIPT_DIR}/"}"'", title: "'"$title"'", description: "'"${description}"'"}]' <<< "${days}")
     fi
   done
@@ -24,6 +24,7 @@ mkfifo "${OUTFILE}"
 trap 'rm -f ${OUTFILE}' EXIT
 while true
 do
+  # shellcheck disable=SC2002
   cat "${OUTFILE}" | nc -w1 -l "${CHALLENGES_AOC_2018_PORT:-8083}" > >( # parse the netcat output, to build the answer redirected to the pipe "out".
     export REQUEST=
     while read -r line
