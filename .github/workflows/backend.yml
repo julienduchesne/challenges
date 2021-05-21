@@ -9,9 +9,8 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
-
     steps:
     - name: Install latest nightly
       uses: actions-rs/toolchain@v1
@@ -20,9 +19,19 @@ jobs:
           override: true
 
     - uses: actions/checkout@v2
-    
+
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Build
       run: make build-backend
       
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Run tests
       run: make test-backend
