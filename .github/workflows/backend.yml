@@ -1,0 +1,38 @@
+name: Backend (Rust)
+on: 
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install latest nightly
+      uses: actions-rs/toolchain@v1
+      with:
+          toolchain: nightly
+          override: true
+
+    - uses: actions/checkout@v2
+    - name: Build
+      run: make build-backend
+      
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install latest nightly
+      uses: actions-rs/toolchain@v1
+      with:
+          toolchain: nightly
+          override: true
+
+    - uses: actions/checkout@v2
+    - name: Run tests
+      run: make test-backend
