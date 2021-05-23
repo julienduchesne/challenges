@@ -33,6 +33,7 @@ export BODY=""
 while IFS= read -r INPUT || [[ -n "$INPUT" ]]; do
     TRIM_INPUT=$(echo "$INPUT" | tr -d '\r\n');
     if echo "$INPUT" | grep -qE '^(GET|POST) /'; then # if line starts with "GET / or POST /"
+        METHOD=$(echo "$TRIM_INPUT" | cut -d ' ' -f1); # extract the method
         REQUEST=$(echo "$TRIM_INPUT" | cut -d ' ' -f2); # extract the request
     elif echo "$INPUT" | tr '[:upper:]' '[:lower:]' | grep -qE '^content-length:'; then
         LENGTH=$(($(echo "$TRIM_INPUT" | cut -d ':' -f2)+0)) # extract the content length
@@ -41,6 +42,8 @@ while IFS= read -r INPUT || [[ -n "$INPUT" ]]; do
         break;
     fi
 done
+
+echo -e "$(date '+%Y-%m-%dT%H:%M:%S.%3NZ') [AoC 2018] ${METHOD} ${REQUEST}" 1>&2
 
 # Handle POST data
 if [ "$START_BODY" = "1" ] && [ "$LENGTH" -gt 0 ]; then

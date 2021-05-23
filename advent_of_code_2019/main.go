@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 type Day struct {
@@ -74,12 +75,22 @@ func solve(w http.ResponseWriter, r *http.Request) {
 
 func logRequest(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s %s\n", r.RemoteAddr, r.Method, r.URL)
+		log.Printf("%s %s\n", r.Method, r.URL)
 		handler.ServeHTTP(w, r)
 	})
 }
 
+type logWriter struct {
+}
+
+func (writer logWriter) Write(bytes []byte) (int, error) {
+	return fmt.Fprint(os.Stderr, time.Now().UTC().Format("2006-01-02T15:04:05.999Z")+" [AoC 2019] "+string(bytes))
+}
+
 func main() {
+	log.SetFlags(0)
+	log.SetOutput(new(logWriter))
+
 	http.HandleFunc("/list/", list)
 	http.HandleFunc("/solve/", solve)
 	port := os.Getenv("CHALLENGES_AOC_2019_PORT")

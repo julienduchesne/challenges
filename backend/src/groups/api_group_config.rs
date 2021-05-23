@@ -71,7 +71,7 @@ impl ApiGroupConfig {
     fn list_challenges(port: i32) -> anyhow::Result<Vec<ApiChallenge>> {
         let client = reqwest::blocking::Client::new();
         let res = client
-            .get(format!("http://localhost:{}/list", port))
+            .get(format!("http://localhost:{}/list/", port))
             .send()?;
         let mut v: Vec<ApiChallenge> = res.json()?;
         v.iter_mut().for_each(|i| i.port = Some(port));
