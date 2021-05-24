@@ -36,7 +36,7 @@ impl ChallengeConfig for ApiChallenge {
 pub struct ApiGroupConfig {
     name: String,
     challenges_url: String,
-    challenges: Vec<Box<dyn ChallengeConfig>>,
+    port: i32,
 }
 
 impl ApiGroupConfig {
@@ -48,23 +48,10 @@ impl ApiGroupConfig {
             Ok(p) => p.parse::<i32>().unwrap_or(default_port),
             Err(_) => default_port,
         };
-        let challenges = match ApiGroupConfig::list_challenges(port) {
-            Ok(v) => v
-                .into_iter()
-                .map(|e| Box::new(e) as Box<dyn ChallengeConfig>)
-                .collect::<Vec<_>>(),
-            Err(err) => {
-                eprintln!(
-                    "Got an error while listing challenges for Advent of Code 2019: {}",
-                    err
-                );
-                vec![]
-            }
-        };
         return ApiGroupConfig {
             name: String::from(name),
             challenges_url: String::from(challenges_url),
-            challenges: challenges,
+            port: port,
         };
     }
 
@@ -87,7 +74,20 @@ impl GroupConfig for ApiGroupConfig {
         return self.challenges_url.as_str();
     }
 
-    fn challenges(&self) -> &Vec<Box<dyn ChallengeConfig>> {
-        return &self.challenges;
+    fn challenges(&self) -> Vec<Box<dyn ChallengeConfig>> {
+        let challenges = match ApiGroupConfig::list_challenges(self.port) {
+            Ok(v) => v
+                .into_iter()
+                .map(|e| Box::new(e) as Box<dyn ChallengeConfig>)
+                .collect::<Vec<_>>(),
+            Err(err) => {
+                eprintln!(
+                    "Got an error while listing challenges for Advent of Code 2019: {}",
+                    err
+                );
+                vec![]
+            }
+        };
+        return challenges;
     }
 }

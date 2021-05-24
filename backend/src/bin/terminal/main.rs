@@ -46,8 +46,7 @@ fn update_view(s: &mut Cursive) {
             user_data.selected_group.as_str(),
             selected_challenge_name.as_str(),
         )
-        .unwrap()
-        .clone();
+        .unwrap();
     let description = selected_challenge.description().to_owned();
 
     if group_changed {

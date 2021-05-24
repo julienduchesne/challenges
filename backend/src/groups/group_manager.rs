@@ -48,7 +48,7 @@ impl GroupManager {
         &self,
         group_name: &str,
         challenge_name: &str,
-    ) -> Option<&Box<dyn ChallengeConfig>> {
+    ) -> Option<Box<dyn ChallengeConfig>> {
         let group = self.get_group(group_name);
         if group.is_some() {
             return group.unwrap().challenge(challenge_name);

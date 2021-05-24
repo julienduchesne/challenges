@@ -3,11 +3,11 @@ use super::challenge_config::ChallengeConfig;
 pub trait GroupConfig {
     fn name(&self) -> &str;
     fn url(&self) -> &str;
-    fn challenges(&self) -> &Vec<Box<dyn ChallengeConfig>>;
-    fn challenge(&self, challenge_title: &str) -> Option<&Box<dyn ChallengeConfig>> {
+    fn challenges(&self) -> Vec<Box<dyn ChallengeConfig>>;
+    fn challenge(&self, challenge_title: &str) -> Option<Box<dyn ChallengeConfig>> {
         return self
             .challenges()
-            .iter()
+            .into_iter()
             .find(|x| x.title() == challenge_title);
     }
     fn challenge_names(&self) -> Vec<String> {

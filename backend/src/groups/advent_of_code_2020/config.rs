@@ -27,44 +27,14 @@ use super::{
     day25::Day25,
 };
 
-pub struct AdventOfCode2020 {
-    challenges: Vec<Box<dyn ChallengeConfig>>,
-}
+pub struct AdventOfCode2020 {}
 
 impl AdventOfCode2020 {
     pub fn new() -> Self
     where
         Self: Sized,
     {
-        return AdventOfCode2020 {
-            challenges: vec![
-                Box::new(Day1 {}),
-                Box::new(Day2 {}),
-                Box::new(Day3 {}),
-                Box::new(Day4 {}),
-                Box::new(Day5 {}),
-                Box::new(Day6 {}),
-                Box::new(Day7 {}),
-                Box::new(Day8 {}),
-                Box::new(Day9 {}),
-                Box::new(Day10 {}),
-                Box::new(Day11 {}),
-                Box::new(Day12 {}),
-                Box::new(Day13 {}),
-                Box::new(Day14 {}),
-                Box::new(Day15 {}),
-                Box::new(Day16 {}),
-                Box::new(Day17 {}),
-                Box::new(Day18 {}),
-                Box::new(Day19 {}),
-                Box::new(Day20 {}),
-                Box::new(Day21 {}),
-                Box::new(Day22 {}),
-                Box::new(Day23 {}),
-                Box::new(Day24 {}),
-                Box::new(Day25 {}),
-            ],
-        };
+        return AdventOfCode2020 {};
     }
 }
 
@@ -76,7 +46,33 @@ impl GroupConfig for AdventOfCode2020 {
         return "https://adventofcode.com/2020";
     }
 
-    fn challenges(&self) -> &Vec<Box<dyn ChallengeConfig>> {
-        return &self.challenges;
+    fn challenges(&self) -> Vec<Box<dyn ChallengeConfig>> {
+        return vec![
+            Box::new(Day1 {}),
+            Box::new(Day2 {}),
+            Box::new(Day3 {}),
+            Box::new(Day4 {}),
+            Box::new(Day5 {}),
+            Box::new(Day6 {}),
+            Box::new(Day7 {}),
+            Box::new(Day8 {}),
+            Box::new(Day9 {}),
+            Box::new(Day10 {}),
+            Box::new(Day11 {}),
+            Box::new(Day12 {}),
+            Box::new(Day13 {}),
+            Box::new(Day14 {}),
+            Box::new(Day15 {}),
+            Box::new(Day16 {}),
+            Box::new(Day17 {}),
+            Box::new(Day18 {}),
+            Box::new(Day19 {}),
+            Box::new(Day20 {}),
+            Box::new(Day21 {}),
+            Box::new(Day22 {}),
+            Box::new(Day23 {}),
+            Box::new(Day24 {}),
+            Box::new(Day25 {}),
+        ];
     }
 }
