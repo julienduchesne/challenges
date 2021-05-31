@@ -14,5 +14,5 @@ helper() {
 
 
 @test "Day 03: Real" {
-    helper "$(cat ./day03_input.txt)" "Part 1: 110195\nPart 2: megsdlpulxvinkatfoyzxcbvq"
+    helper "$(cat ./day03_input.txt)" "Part 1: 110195\nPart 2: #894"
 }
