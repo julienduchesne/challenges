@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-. ./utils.sh
+source ./lib/string.sh
 
 input=${1-$(cat -)}
 input="$(trim "$input" | tr " " "\n")"

@@ -2,7 +2,9 @@
 
 # Title: Day 1: Chronal Calibration
 
-. ./utils.sh
+set -euo pipefail
+
+source ./lib/string.sh
 
 input=${1-$(cat -)}
 input="$(trim "$input")"
