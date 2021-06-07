@@ -43,6 +43,6 @@ test-aoc2019:
 
 test-aoc2018:
 	cd advent_of_code_2018 && shellcheck -axP SCRIPTDIR *.sh
-	cd advent_of_code_2018 && bats . --jobs 4
+	cd advent_of_code_2018 && bats . -r --jobs 4
 
 test: test-backend test-aoc2019 test-aoc2018
