@@ -23,7 +23,6 @@ func solveDay09(input string) (string, error) {
 	_, p2 := runIntcode(code, p2Input, nil)
 
 	return fmt.Sprintf("Part 1: %d\nPart 2: %d", p1, p2), nil
-
 }
 
 func init() {
