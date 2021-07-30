@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"reflect"
 	"strings"
 	"time"
 )
@@ -21,6 +22,15 @@ type Day struct {
 var days []Day
 
 func registerDay(title, description string, solveFunc func(string) (string, error)) {
+	for _, day := range days {
+		if day.Title == title {
+			panic("There are two days with the following title: " + title)
+		}
+		if reflect.ValueOf(day.solveFunc).Pointer() == reflect.ValueOf(solveFunc).Pointer() {
+			panic(fmt.Sprintf("`%s` and `%s` have the same solve function", day.Title, title))
+		}
+	}
+
 	days = append(days, Day{ID: fmt.Sprintf("%d", len(days)+1), Title: title, Description: description, solveFunc: solveFunc})
 }
 
