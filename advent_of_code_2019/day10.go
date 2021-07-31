@@ -2,46 +2,27 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"sort"
 	"strings"
 )
 
-type Asteroid struct {
-	X, Y int
-}
-
-func (a Asteroid) Angle(other Asteroid) float64 {
-	var theta = math.Atan2(float64(other.Y-a.Y), float64(other.X-a.X))
-	theta *= 180 / math.Pi
-	theta += 90
-	if theta < 0 {
-		theta = 360 + theta
-	}
-	return theta
-}
-
-func (a Asteroid) Distance(other Asteroid) float64 {
-	return math.Sqrt(math.Exp2(float64(other.X-a.X)) + math.Exp2(float64(other.Y-a.Y)))
-}
-
 func solveDay10(input string) (string, error) {
-	var asteroids []Asteroid
+	var asteroids []Point
 	for y, line := range strings.Split(input, "\n") {
 		line = strings.TrimSpace(line)
 		for x, char := range line {
 			if char == '#' {
-				asteroids = append(asteroids, Asteroid{X: x, Y: y})
+				asteroids = append(asteroids, Point{X: x, Y: y})
 			}
 		}
 	}
 
 	var (
 		p1Index    int
-		p1SightMap map[float64][]Asteroid
+		p1SightMap map[float64][]Point
 	)
 	for i, asteroid := range asteroids {
-		sightMap := map[float64][]Asteroid{}
+		sightMap := map[float64][]Point{}
 		for j, other := range asteroids {
 			if i == j {
 				continue
@@ -67,7 +48,7 @@ func solveDay10(input string) (string, error) {
 	sort.Float64s(keys)
 
 	var countBefore, countAfter int
-	p2Asteroids := []Asteroid{}
+	p2Asteroids := []Point{}
 	for {
 		countBefore = len(p2Asteroids)
 		if countBefore >= 200 || (countBefore != 0 && countBefore == countAfter) {
