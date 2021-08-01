@@ -1,4 +1,4 @@
-// Used in days 2, 5, 7, 9
+// Used in days 2, 5, 7, 9, 11
 
 package main
 
@@ -112,5 +112,10 @@ outer:
 	if len(outputs) > 0 {
 		output = outputs[len(outputs)-1]
 	}
+
+	if outputChannel != nil {
+		close(outputChannel)
+	}
+
 	return code, output
 }

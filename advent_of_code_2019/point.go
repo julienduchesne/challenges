@@ -6,6 +6,10 @@ type Point struct {
 	X, Y float64
 }
 
+func (p Point) Add(other Point) Point {
+	return Point{p.X + other.X, p.Y + other.Y}
+}
+
 func (p Point) Angle(other Point) float64 {
 	var theta = math.Atan2(float64(other.Y-p.Y), float64(other.X-p.X))
 	theta *= 180 / math.Pi
