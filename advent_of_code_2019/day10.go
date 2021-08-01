@@ -12,7 +12,7 @@ func solveDay10(input string) (string, error) {
 		line = strings.TrimSpace(line)
 		for x, char := range line {
 			if char == '#' {
-				asteroids = append(asteroids, Point{X: x, Y: y})
+				asteroids = append(asteroids, Point{X: float64(x), Y: float64(y)})
 			}
 		}
 	}
@@ -36,7 +36,7 @@ func solveDay10(input string) (string, error) {
 	}
 	p1 := len(p1SightMap)
 
-	p2 := -1
+	p2 := float64(-1)
 	p1Asteroid := asteroids[p1Index]
 	keys := []float64{}
 	for key, values := range p1SightMap {
@@ -69,7 +69,7 @@ func solveDay10(input string) (string, error) {
 		p2 = p2A.X*100 + p2A.Y
 	}
 
-	return fmt.Sprintf("Part 1: %d\nPart 2: %d", p1, p2), nil
+	return fmt.Sprintf("Part 1: %d\nPart 2: %d", p1, int(p2)), nil
 }
 
 func init() {
